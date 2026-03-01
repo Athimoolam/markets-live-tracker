@@ -1,5 +1,5 @@
 # Markets Live Tracker
-<image-card alt="Markets Live Tracker Screenshot" src="screenshot.png" ></image-card>
+![Markets Live Tracker Screenshot](screenshot.png)
 
 A simple, local/offline-capable HTML dashboard to monitor:
 
