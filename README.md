@@ -2,7 +2,7 @@
 
 A simple, local/offline-capable HTML dashboard to monitor:
 
-- Global stock exchanges (including separate NSE & BSE for India)
+- Global stock exchanges 
 - Nordic markets (Sweden, Denmark, Finland, Norway, Iceland)
 - Major crypto exchanges (always 24/7)
 
