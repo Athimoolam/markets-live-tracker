@@ -1,154 +1,116 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Markets • Live Status</title>
-
-  <!-- PWA manifest -->
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0a0a1f">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
   <style>
     :root {
       --bg: #0a0a1f;
       --card: #1c1c3a;
-      --text: #e2e8f0;
+      --text: #ddd;
       --accent: #bb86fc;
-      --green: #10b981;
-      --red: #f87171;
-      --link: #22d3ee;
-      --sub: #5eead4;
-      --muted: #94a3b8;
-    }
-    [data-theme="light"] {
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1e293b;
-      --accent: #0ea5e9;
-      --green: #059669;
-      --red: #dc2626;
-      --link: #0284c7;
-      --sub: #0d9488;
-      --muted: #64748b;
+      --green: #2e7d32;
+      --red:   #c62828;
+      --link:  #66d9ff;
     }
     body {
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 12px 10px;
+      padding: 15px 10px;
       min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
     }
     .container {
       max-width: 1600px;
       margin: 0 auto;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
     h1 {
-      margin: 0;
+      text-align: center;
       color: var(--accent);
-      font-size: 1.8em;
-    }
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--muted);
-      color: var(--text);
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.95em;
+      margin: 10px 0 8px;
+      font-size: 1.9em;
     }
     .clock {
       text-align: center;
-      font-size: 1em;
-      margin: 8px 0 16px;
-      color: var(--muted);
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      color: #66ff99;
     }
     .panel {
       background: var(--card);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
     }
     .panel h2 {
       margin: 0;
       padding: 10px 14px;
-      background: var(--bg);
-      color: var(--accent);
-      font-size: 1.15em;
+      background: #0d1b40;
+      color: #ffcc00;
+      font-size: 1.2em;
       text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.88em;
+      font-size: 0.93em;
     }
     th, td {
-      padding: 6px 8px;
+      padding: 8px 10px;
       text-align: left;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid #333;
     }
     th {
-      background: var(--bg);
-      color: #cbd5e1;
+      background: #0d1b40;
+      color: #ffcc00;
     }
-    .open    { background: var(--green) !important; color: white; font-weight: bold; }
+    .open    { background: var(--green) !important; font-weight: bold; color: white; }
     .closed  { background: var(--red)   !important; color: white; }
-    .weekend { background: #475569 !important; color: #cbd5e1; }
-    .always-open { background: #047857 !important; color: white; }
-    .exchange-name a { color: var(--link); text-decoration: none; font-weight: bold; }
-    .exchange-name a:hover { text-decoration: underline; }
-    tr:hover { background: rgba(255,255,255,0.04); }
+    .weekend { background: #424242 !important; }
+    .always-open { background: #1b5e20 !important; color: white; }
+    .countdown { font-size: 0.88em; color: #a0d0ff; white-space: nowrap; }
+    .local-time-cell {
+      white-space: nowrap;
+      font-size: 0.9em;
+      min-width: 140px;
+    }
+    .status-cell {
+      min-width: 110px;
+      white-space: nowrap;
+    }
+    .diff-cell {
+      min-width: 90px;
+      white-space: nowrap;
+    }
+    .open-close-cell {
+      min-width: 130px;
+      white-space: nowrap;
+    }
+    .exchange-name a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .exchange-name a:hover {
+      text-decoration: underline;
+      color: #99e6ff;
+    }
+    tr:hover { background: rgba(255,255,255,0.06); }
     .subheader {
-      background: var(--bg) !important;
-      color: var(--sub) !important;
+      background: #0d1b40 !important;
+      color: #80ffaa !important;
       font-weight: bold;
       text-align: center;
-      padding: 5px !important;
+      padding: 6px !important;
     }
-    .indices {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-      margin-top: 24px;
-    }
-    .index-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .index-card {
-      background: var(--bg);
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-    }
-    .index-name { font-weight: bold; margin-bottom: 4px; }
-    .index-value { font-size: 1.3em; }
-    .index-change.up   { color: var(--green); }
-    .index-change.down { color: var(--red); }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <header>
-    <h1>Markets Live</h1>
-    <button class="theme-toggle" id="themeToggle">Light Mode</button>
-  </header>
-
+  <h1>World Markets Live</h1>
   <div class="clock">
     Your Time: <span id="localTime"></span> | UTC: <span id="utcTime"></span>
   </div>
@@ -170,18 +132,10 @@
       <tbody id="marketBody"></tbody>
     </table>
   </div>
-
-  <div class="indices">
-    <h2>Major Indices (delayed)</h2>
-    <div class="index-grid" id="indicesGrid"></div>
-  </div>
 </div>
 
 <script>
-// ────────────────────────────────────────────────
-// DATA – ordered earliest → latest open (UTC)
-// ────────────────────────────────────────────────
-
+// DATA – NSE/BSE short, ordered earliest to latest open
 const ALL_EXCHANGES = [
   { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/" },
   { name: "SGX", city: "Singapore", utcOpen: 1, utcClose: 9, note: "09:00–17:00 SGT", timeZone: "Asia/Singapore", url: "https://www.sgx.com/" },
@@ -194,7 +148,7 @@ const ALL_EXCHANGES = [
   { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 8, utcClose: 16.5, note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Oslo Børs", city: "Oslo", utcOpen: 8, utcClose: 15.5, note: "09:00–16:30 CET", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo" },
+  { name: "Oslo Børs", city: "Oslo", utcOpen: 8, utcClose: 15.5, note: "09:00–16:30 CET approx.", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo" },
   { name: "Nasdaq Iceland", city: "Reykjavik", utcOpen: 9.5, utcClose: 15.4167, note: "09:30–15:25 GMT", timeZone: "Atlantic/Reykjavik", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", url: "https://www.londonstockexchange.com/" },
   { name: "Euronext Paris", city: "Paris", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Paris", url: "https://www.euronext.com/en/markets/paris" },
@@ -207,41 +161,47 @@ const ALL_EXCHANGES = [
   { name: "Bybit / OKX", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bybit.com/" }
 ];
 
-// ────────────────────────────────────────────────
-// HELPERS
-// ────────────────────────────────────────────────
-
+// Helpers
 function pad(n) { return n.toString().padStart(2, '0'); }
 
-function formatHour(h, offset = 0) {
-  if (h == null) return '—';
-  let adj = h + offset;
-  adj = (adj + 24) % 24;
-  const hh = Math.floor(adj);
-  const mm = Math.round((adj % 1) * 60);
+function formatHour(h, offsetHours = 0) {
+  if (h === null) return '—';
+  let adjusted = h + offsetHours;
+  if (adjusted < 0) adjusted += 24;
+  if (adjusted >= 24) adjusted -= 24;
+  const hh = Math.floor(adjusted);
+  const mm = Math.round((adjusted % 1) * 60);
   return `${pad(hh)}:${pad(mm)}`;
 }
 
 function getLocalTime(tz) {
   if (!tz) return 'Global / 24/7';
   const now = new Date();
-  return now.toLocaleTimeString([], { timeZone: tz, hour12: false, hour: '2-digit', minute: '2-digit' }) +
-         ' ' + tz.split('/').pop().replace(/_/g, ' ');
+  return now.toLocaleTimeString([], {
+    timeZone: tz,
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit'
+  }) + ' ' + tz.split('/').pop().replace(/_/g, ' ');
 }
 
-function getTimeDiff(tz) {
+function getTimeDiffString(tz) {
   if (!tz) return '—';
   const now = new Date();
-  const local = new Date(now.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
-  const market = new Date(now.toLocaleString('en-US', { timeZone: tz }));
-  const diffH = Math.round((market - local) / 3600000);
-  if (diffH === 0) return '0h';
-  return diffH > 0 ? `+${diffH}h` : `${diffH}h`;
+  const localDate = new Date(now.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
+  const marketDate = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+  const diffMs = marketDate - localDate;
+  const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+  if (diffHours === 0) return '0h (same)';
+  return diffHours > 0 ? `+${diffHours}h` : `${diffHours}h`;
 }
 
-function getStatus(utcH, day, open, close, isCrypto) {
-  if (isCrypto) return { text: '24/7 OPEN', cls: 'always-open', countdown: 'Always active' };
-  if (day === 0 || day === 6) return { text: 'Weekend', cls: 'weekend', countdown: 'Next: Monday' };
+function isWeekend(d) { return d === 0 || d === 6; }
+
+function getStatusInfo(utcH, day, open, close, isCrypto = false) {
+  if (isCrypto) return { status: "24/7 OPEN", cls: "always-open", countdown: "Always active" };
+
+  if (isWeekend(day)) return { status: "Weekend", cls: "weekend", countdown: "Next: Monday" };
 
   const overnight = close < open;
   const isOpen = overnight ? (utcH >= open || utcH < close) : (utcH >= open && utcH < close);
@@ -249,34 +209,34 @@ function getStatus(utcH, day, open, close, isCrypto) {
   let diff = isOpen ? close - utcH : open - utcH;
   if (diff < 0) diff += 24;
   const h = Math.floor(diff);
-  const m = Math.round((diff % 1) * 60);
+  const m = Math.round((diff - h) * 60);
+  const when = isOpen ? "Closes" : "Opens";
+
   return {
-    text: isOpen ? 'OPEN' : 'CLOSED',
-    cls: isOpen ? 'open' : 'closed',
-    countdown: `${isOpen ? 'Closes' : 'Opens'} in ${h}h ${m}m`
+    status: isOpen ? "OPEN" : "CLOSED",
+    cls: isOpen ? "open" : "closed",
+    countdown: `${when} in ${h}h ${m}m`
   };
 }
 
-function getUserOffset() {
-  return -(new Date().getTimezoneOffset() / 60);
+function getUserOffsetHours() {
+  return - (new Date().getTimezoneOffset() / 60);
 }
 
-// ────────────────────────────────────────────────
-// RENDER
-// ────────────────────────────────────────────────
-
+// Render clock
 function renderClock() {
   const n = new Date();
-  document.getElementById('localTime').textContent = n.toLocaleTimeString([], {hour12:false}) + ' (' + Intl.DateTimeFormat().resolvedOptions().timeZone + ')';
-  document.getElementById('utcTime').textContent = n.toUTCString().slice(17,25) + ' UTC';
+  document.getElementById("localTime").textContent = n.toLocaleTimeString([], {hour12:false}) + " (" + Intl.DateTimeFormat().resolvedOptions().timeZone + ")";
+  document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
 }
 
+// Render markets table
 function renderMarkets() {
   const n = new Date();
   const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
   const day = n.getUTCDay();
-  const offset = getUserOffset();
-  let html = '';
+  const userOffset = getUserOffsetHours();
+  let html = "";
   let nordic = false;
 
   ALL_EXCHANGES.forEach(ex => {
@@ -284,75 +244,45 @@ function renderMarkets() {
       html += `<tr class="subheader"><td colspan="7">Nordic Markets</td></tr>`;
       nordic = true;
     }
-    if (ex.isCrypto && !html.includes('Crypto')) {
+
+    if (ex.isCrypto && !html.includes('Crypto Exchanges')) {
       html += `<tr class="subheader"><td colspan="7">Crypto Exchanges (24/7)</td></tr>`;
     }
 
-    const status = getStatus(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
+    const info = getStatusInfo(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
 
-    const nameCell = ex.url
-      ? `<td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a></td>`
+    const nameCell = ex.url 
+      ? `<td class="exchange-name"><a href="${ex.url}" target="_blank" rel="noopener noreferrer">${ex.name}</a></td>`
       : `<td>${ex.name}</td>`;
 
-    const localOpen = formatHour(ex.utcOpen, offset);
-    const localClose = formatHour(ex.utcClose, offset);
+    const localOpen = formatHour(ex.utcOpen, userOffset);
+    const localClose = formatHour(ex.utcClose, userOffset);
 
-    const diff = getTimeDiff(ex.timeZone);
+    const diffStr = getTimeDiffString(ex.timeZone);
+    const diffClass = diffStr.startsWith('+') ? 'positive' : diffStr.startsWith('-') ? 'negative' : 'zero';
 
     html += `
-      <tr class="${status.cls}">
+      <tr class="${info.cls}">
         ${nameCell}
-        <td>${ex.note || '—'}</td>
-        <td>${getLocalTime(ex.timeZone)}</td>
-        <td>${diff}</td>
-        <td>${localOpen} – ${localClose}</td>
-        <td><strong>${status.text}</strong></td>
-        <td>${status.countdown}</td>
+        <td class="small-note">${ex.note || '—'}</td>
+        <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
+        <td class="diff-cell ${diffClass}">${diffStr}</td>
+        <td class="open-close-cell">${localOpen} – ${localClose}</td>
+        <td class="status-cell"><strong>${info.status}</strong></td>
+        <td class="countdown">${info.countdown}</td>
       </tr>`;
   });
 
-  document.getElementById('marketBody').innerHTML = html;
+  document.getElementById("marketBody").innerHTML = html;
 }
 
-// ────────────────────────────────────────────────
-// Theme toggle + persistence
-// ────────────────────────────────────────────────
-
-function initTheme() {
-  const saved = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeToggle').textContent = saved === 'dark' ? 'Light Mode' : 'Dark Mode';
-}
-
-document.getElementById('themeToggle').addEventListener('click', () => {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-  document.getElementById('themeToggle').textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
-});
-
-// ────────────────────────────────────────────────
-// PWA – register service worker (very basic)
-// ────────────────────────────────────────────────
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
-  });
-}
-
-// ────────────────────────────────────────────────
-// START
-// ────────────────────────────────────────────────
-
-initTheme();
-renderClock();
-renderMarkets();
-setInterval(() => {
+function update() {
   renderClock();
   renderMarkets();
-}, 60000);
+}
+
+update();
+setInterval(update, 60000);
 </script>
 
 </body>
