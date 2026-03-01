@@ -6,14 +6,14 @@
   <title>Markets • Live Status</title>
   <style>
     :root {
-      --bg: #0f172a;              /* Deep navy-gray – calm base */
-      --card: #1e293b;            /* Soft dark slate – panels */
-      --text: #e2e8f0;            /* Light warm gray – main text */
-      --accent: #67e8f9;          /* Soft cyan-blue – headers/links */
-      --green: #10b981;           /* Emerald – open/success */
-      --red:   #f87171;           /* Warm red – closed */
-      --link:  #22d3ee;           /* Bright cyan – clickable links */
-      --sub:   #5eead4;           /* Muted teal – subheaders */
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --accent: #67e8f9;
+      --green: #10b981;
+      --red:   #f87171;
+      --link:  #22d3ee;
+      --sub:   #5eead4;
     }
     body {
       font-family: Arial, sans-serif;
@@ -37,7 +37,7 @@
       text-align: center;
       font-size: 1.05em;
       margin-bottom: 10px;
-      color: #a5f3fc;             /* Lighter cyan for clock */
+      color: #a5f3fc;
     }
     .split {
       display: flex;
@@ -120,7 +120,6 @@
   </div>
 
   <div class="split">
-    <!-- Left panel -->
     <div class="panel">
       <h2>Markets Overview</h2>
       <table>
@@ -138,7 +137,6 @@
       </table>
     </div>
 
-    <!-- Right panel (duplicate) -->
     <div class="panel">
       <h2>Markets Overview (Duplicate)</h2>
       <table>
@@ -159,9 +157,124 @@
 </div>
 
 <script>
-// Your full script here (data, helpers, render functions, update, setInterval)
-// Copy from your current working version – no changes needed
-// If you need the script pasted again, let me know
+// Full working script with data
+const ALL_EXCHANGES = [
+  { name: "NSE (National Stock Exchange)", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
+  { name: "BSE (Bombay Stock Exchange)", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
+  { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, region: "Asia", note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/" },
+  { name: "SSE", city: "Shanghai", utcOpen: 1.5, utcClose: 7, region: "Asia", note: "09:30–15:00 CST", timeZone: "Asia/Shanghai", url: "http://english.sse.com.cn/" },
+  { name: "HKEX", city: "Hong Kong", utcOpen: 1.5, utcClose: 8, region: "Asia", note: "09:30–16:00 HKT", timeZone: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/" },
+  { name: "ASX", city: "Sydney", utcOpen: 22, utcClose: 8, region: "Asia", note: "10:00–16:00 AEDT/AEST", timeZone: "Australia/Sydney", url: "https://www.asx.com.au/" },
+  { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
+  { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, region: "Europe", note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
+  { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
+  { name: "Oslo Børs (Euronext)", city: "Oslo", utcOpen: 8, utcClose: 15.5, region: "Europe", note: "09:00–16:30 CET approx.", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo" },
+  { name: "Nasdaq Iceland", city: "Reykjavik", utcOpen: 9.5, utcClose: 15.4167, region: "Europe", note: "09:30–15:25 GMT", timeZone: "Atlantic/Reykjavik", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
+  { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", url: "https://www.londonstockexchange.com/" },
+  { name: "Euronext Paris (CAC 40)", city: "Paris", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "09:00–17:30 CET", timeZone: "Europe/Paris", url: "https://www.euronext.com/en/markets/paris" },
+  { name: "Frankfurt (DAX/Xetra)", city: "Frankfurt", utcOpen: 7, utcClose: 19, region: "Europe", note: "08:00–20:00 CET (extended)", timeZone: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/" },
+  { name: "NYSE / NASDAQ", city: "New York", utcOpen: 14.5, utcClose: 21, region: "US", note: "09:30–16:00 ET", timeZone: "America/New_York", url: "https://www.nyse.com/" },
+  { name: "Binance", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.binance.com/en/trade" },
+  { name: "Coinbase", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.coinbase.com/trade" },
+  { name: "Kraken", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.kraken.com/" },
+  { name: "Bitstamp", city: "Europe/Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bitstamp.net/" },
+  { name: "Bybit / OKX", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bybit.com/" }
+];
+
+function pad(n) { return n.toString().padStart(2, '0'); }
+
+function formatHour(h) {
+  if (h === null) return '—';
+  const hh = Math.floor(h);
+  const mm = Math.round((h % 1) * 60);
+  return `${pad(hh)}:${pad(mm)}`;
+}
+
+function getLocalTime(tz) {
+  if (!tz) return 'Global / 24/7';
+  const now = new Date();
+  return now.toLocaleTimeString([], {
+    timeZone: tz,
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit'
+  }) + ' ' + tz.split('/').pop().replace(/_/g, ' ');
+}
+
+function isWeekend(d) { return d === 0 || d === 6; }
+
+function getStatusInfo(utcH, day, open, close, isCrypto = false) {
+  if (isCrypto) return { status: "24/7 OPEN", cls: "always-open", countdown: "Always active" };
+
+  if (isWeekend(day)) return { status: "Weekend", cls: "weekend", countdown: "Next: Monday" };
+
+  const overnight = close < open;
+  const isOpen = overnight ? (utcH >= open || utcH < close) : (utcH >= open && utcH < close);
+
+  let diff = isOpen ? close - utcH : open - utcH;
+  if (diff < 0) diff += 24;
+  const h = Math.floor(diff);
+  const m = Math.round((diff - h) * 60);
+  const when = isOpen ? "Closes" : "Opens";
+
+  return {
+    status: isOpen ? "OPEN" : "CLOSED",
+    cls: isOpen ? "open" : "closed",
+    countdown: `${when} in ${h}h ${m}m`
+  };
+}
+
+function renderClock() {
+  const n = new Date();
+  document.getElementById("localTime").textContent = n.toLocaleTimeString([], {hour12:false}) + " (" + Intl.DateTimeFormat().resolvedOptions().timeZone + ")";
+  document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
+}
+
+function renderPanel(bodyId) {
+  const n = new Date();
+  const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
+  const day = n.getUTCDay();
+  let html = "";
+  let nordic = false;
+
+  ALL_EXCHANGES.forEach(ex => {
+    if (ex.nordic && !nordic) {
+      html += `<tr class="subheader"><td colspan="6">Nordic Markets</td></tr>`;
+      nordic = true;
+    }
+
+    if (ex.isCrypto && !html.includes('Crypto Exchanges')) {
+      html += `<tr class="subheader"><td colspan="6">Crypto Exchanges (24/7)</td></tr>`;
+    }
+
+    const info = getStatusInfo(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
+
+    const nameCell = ex.url 
+      ? `<td class="exchange-name"><a href="${ex.url}" target="_blank" rel="noopener noreferrer">${ex.name}</a></td>`
+      : `<td>${ex.name}</td>`;
+
+    html += `
+      <tr class="${info.cls}">
+        ${nameCell}
+        <td>${formatHour(ex.utcOpen)} – ${formatHour(ex.utcClose)}</td>
+        <td class="small-note">${ex.note || '—'}</td>
+        <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
+        <td class="status-cell"><strong>${info.status}</strong></td>
+        <td class="countdown">${info.countdown}</td>
+      </tr>`;
+  });
+
+  document.getElementById(bodyId).innerHTML = html;
+}
+
+function update() {
+  renderClock();
+  renderPanel("leftBody");
+  renderPanel("rightBody");
+}
+
+update();
+setInterval(update, 60000);
 </script>
 
 </body>
