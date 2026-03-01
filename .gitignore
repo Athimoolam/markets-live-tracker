@@ -1,0 +1,19 @@
+# Common junk files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.log
+*.tmp
+*.bak
+*~
+
+# Editor folders
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Personal / secrets
+secrets.*
+.env
