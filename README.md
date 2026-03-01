@@ -1,5 +1,5 @@
 # Markets Live Tracker
-<image-card alt="Markets Live Tracker Screenshot" src="Screenshot.png" ></image-card>
+![Markets Live Tracker Screenshot](Screenshot.png)
 *Live view of the dashboard with stock and crypto timings*
 
 A simple, local/offline-capable HTML dashboard to monitor:
