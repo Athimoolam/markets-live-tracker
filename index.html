@@ -23,7 +23,7 @@
       min-height: 100vh;
     }
     .container {
-      max-width: 1600px;
+      max-width: 1700px; /* slightly wider to fit new column */
       margin: 0 auto;
     }
     h1 {
@@ -45,8 +45,8 @@
       justify-content: center;
     }
     .panel {
-      flex: 1 1 650px;
-      min-width: 520px;
+      flex: 1 1 700px;
+      min-width: 550px;
       background: var(--card);
       border-radius: 10px;
       overflow: hidden;
@@ -90,6 +90,15 @@
       text-align: center;
       font-weight: bold;
     }
+    .diff-cell {
+      min-width: 90px;
+      text-align: center;
+      font-weight: bold;
+      color: #94a3b8;
+    }
+    .positive { color: #34d399; }
+    .negative { color: #f87171; }
+    .zero     { color: #cbd5e1; }
     .exchange-name a {
       color: var(--link);
       text-decoration: none;
@@ -126,6 +135,7 @@
             <th>Exchange</th>
             <th>Local Hours</th>
             <th>Current Local</th>
+            <th>Time Diff</th>
             <th>Open–Close (your time)</th>
             <th>Status</th>
             <th>Next</th>
@@ -143,6 +153,7 @@
             <th>Exchange</th>
             <th>Local Hours</th>
             <th>Current Local</th>
+            <th>Time Diff</th>
             <th>Open–Close (your time)</th>
             <th>Status</th>
             <th>Next</th>
@@ -155,7 +166,7 @@
 </div>
 
 <script>
-// DATA (NSE/BSE short names)
+// DATA
 const ALL_EXCHANGES = [
   { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
   { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
@@ -182,9 +193,9 @@ const ALL_EXCHANGES = [
 // Helpers
 function pad(n) { return n.toString().padStart(2, '0'); }
 
-function formatHour(h, localOffsetHours = 0) {
+function formatHour(h, offsetHours = 0) {
   if (h === null) return '—';
-  let adjusted = h + localOffsetHours;
+  let adjusted = h + offsetHours;
   if (adjusted < 0) adjusted += 24;
   if (adjusted >= 24) adjusted -= 24;
   const hh = Math.floor(adjusted);
@@ -201,6 +212,17 @@ function getLocalTime(tz) {
     hour: '2-digit',
     minute: '2-digit'
   }) + ' ' + tz.split('/').pop().replace(/_/g, ' ');
+}
+
+function getTimeDiffString(tz) {
+  if (!tz) return '—';
+  const now = new Date();
+  const localDate = new Date(now.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
+  const marketDate = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+  const diffMs = marketDate - localDate;
+  const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+  if (diffHours === 0) return '0h (same)';
+  return diffHours > 0 ? `+${diffHours}h` : `${diffHours}h`;
 }
 
 function isWeekend(d) { return d === 0 || d === 6; }
@@ -226,7 +248,6 @@ function getStatusInfo(utcH, day, open, close, isCrypto = false) {
   };
 }
 
-// Get user's local offset in hours from UTC (negative for east of UTC)
 function getUserOffsetHours() {
   return - (new Date().getTimezoneOffset() / 60);
 }
@@ -238,23 +259,23 @@ function renderClock() {
   document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
 }
 
-// Render panel (both left and right use same logic)
+// Render panel
 function renderPanel(bodyId) {
   const n = new Date();
   const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
   const day = n.getUTCDay();
-  const userOffset = getUserOffsetHours(); // hours offset from UTC
+  const userOffset = getUserOffsetHours();
   let html = "";
   let nordic = false;
 
   ALL_EXCHANGES.forEach(ex => {
     if (ex.nordic && !nordic) {
-      html += `<tr class="subheader"><td colspan="6">Nordic Markets</td></tr>`;
+      html += `<tr class="subheader"><td colspan="7">Nordic Markets</td></tr>`;
       nordic = true;
     }
 
     if (ex.isCrypto && !html.includes('Crypto Exchanges')) {
-      html += `<tr class="subheader"><td colspan="6">Crypto Exchanges (24/7)</td></tr>`;
+      html += `<tr class="subheader"><td colspan="7">Crypto Exchanges (24/7)</td></tr>`;
     }
 
     const info = getStatusInfo(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
@@ -263,15 +284,18 @@ function renderPanel(bodyId) {
       ? `<td class="exchange-name"><a href="${ex.url}" target="_blank" rel="noopener noreferrer">${ex.name}</a></td>`
       : `<td>${ex.name}</td>`;
 
-    // Open–Close in user's local time
     const localOpen = formatHour(ex.utcOpen, userOffset);
     const localClose = formatHour(ex.utcClose, userOffset);
+
+    const diffStr = getTimeDiffString(ex.timeZone);
+    const diffClass = diffStr.startsWith('+') ? 'positive' : diffStr.startsWith('-') ? 'negative' : 'zero';
 
     html += `
       <tr class="${info.cls}">
         ${nameCell}
         <td class="small-note">${ex.note || '—'}</td>
         <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
+        <td class="diff-cell ${diffClass}">${diffStr}</td>
         <td>${localOpen} – ${localClose}</td>
         <td class="status-cell"><strong>${info.status}</strong></td>
         <td class="countdown">${info.countdown}</td>
