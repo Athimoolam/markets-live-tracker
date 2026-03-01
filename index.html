@@ -19,7 +19,7 @@
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 15px 15px;
+      padding: 12px 10px;
       min-height: 100vh;
     }
     .container {
@@ -30,12 +30,12 @@
       text-align: center;
       color: var(--accent);
       margin: 10px 0 8px;
-      font-size: 1.9em;
+      font-size: 1.7em;
     }
     .clock {
       text-align: center;
-      font-size: 1.1em;
-      margin-bottom: 15px;
+      font-size: 1em;
+      margin-bottom: 12px;
       color: #66ff99;
     }
     .panel {
@@ -46,20 +46,20 @@
     }
     .panel h2 {
       margin: 0;
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: #0d1b40;
       color: #ffcc00;
-      font-size: 1.2em;
+      font-size: 1.15em;
       text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.93em;
+      font-size: 0.88em; /* smaller font for slimness */
     }
     th, td {
-      padding: 8px 10px;
-      text-align: left;           /* All columns left-aligned by default */
+      padding: 6px 8px; /* reduced padding */
+      text-align: left;
       border-bottom: 1px solid #333;
     }
     th {
@@ -70,30 +70,23 @@
     .closed  { background: var(--red)   !important; color: white; }
     .weekend { background: #424242 !important; }
     .always-open { background: #1b5e20 !important; color: white; }
-    .countdown { font-size: 0.88em; color: #a0d0ff; white-space: nowrap; }
+    .countdown { font-size: 0.84em; color: #a0d0ff; white-space: nowrap; }
     .local-time-cell {
       white-space: nowrap;
-      font-size: 0.9em;
-      min-width: 140px;
+      min-width: 120px;
     }
     .status-cell {
-      min-width: 110px;
+      min-width: 100px;
       white-space: nowrap;
-      /* No center alignment anymore */
     }
     .diff-cell {
-      min-width: 90px;
+      min-width: 80px;
       white-space: nowrap;
-      /* No center alignment */
     }
     .open-close-cell {
-      min-width: 130px;
+      min-width: 120px;
       white-space: nowrap;
-      /* No center alignment */
     }
-    .positive { color: #34d399; }
-    .negative { color: #f87171; }
-    .zero     { color: #cbd5e1; }
     .exchange-name a {
       color: var(--link);
       text-decoration: none;
@@ -109,7 +102,7 @@
       color: #80ffaa !important;
       font-weight: bold;
       text-align: center;
-      padding: 6px !important;
+      padding: 5px !important;
     }
   </style>
 </head>
@@ -141,14 +134,21 @@
 </div>
 
 <script>
-// DATA
+// DATA – ordered from earliest to latest UTC open time
 const ALL_EXCHANGES = [
-  { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
-  { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
+  // Earliest: Asia Pacific
   { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, region: "Asia", note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/" },
   { name: "SSE", city: "Shanghai", utcOpen: 1.5, utcClose: 7, region: "Asia", note: "09:30–15:00 CST", timeZone: "Asia/Shanghai", url: "http://english.sse.com.cn/" },
   { name: "HKEX", city: "Hong Kong", utcOpen: 1.5, utcClose: 8, region: "Asia", note: "09:30–16:00 HKT", timeZone: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/" },
+  { name: "SGX (Singapore)", city: "Singapore", utcOpen: 1, utcClose: 9, region: "Asia", note: "09:00–17:00 SGT", timeZone: "Asia/Singapore", url: "https://www.sgx.com/" },
   { name: "ASX", city: "Sydney", utcOpen: 22, utcClose: 8, region: "Asia", note: "10:00–16:00 AEDT/AEST", timeZone: "Australia/Sydney", url: "https://www.asx.com.au/" },
+  { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
+  { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
+
+  // Middle East
+  { name: "DFM (Dubai)", city: "Dubai", utcOpen: 6, utcClose: 12, region: "Middle East", note: "10:00–16:00 GST", timeZone: "Asia/Dubai", url: "https://www.dfm.ae/" },
+
+  // Europe / Nordics
   { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, region: "Europe", note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
@@ -157,7 +157,11 @@ const ALL_EXCHANGES = [
   { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", url: "https://www.londonstockexchange.com/" },
   { name: "Euronext Paris (CAC 40)", city: "Paris", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "09:00–17:30 CET", timeZone: "Europe/Paris", url: "https://www.euronext.com/en/markets/paris" },
   { name: "Frankfurt (DAX/Xetra)", city: "Frankfurt", utcOpen: 7, utcClose: 19, region: "Europe", note: "08:00–20:00 CET (extended)", timeZone: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/" },
+
+  // US
   { name: "NYSE / NASDAQ", city: "New York", utcOpen: 14.5, utcClose: 21, region: "US", note: "09:30–16:00 ET", timeZone: "America/New_York", url: "https://www.nyse.com/" },
+
+  // Crypto – always at the end
   { name: "Binance", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.binance.com/en/trade" },
   { name: "Coinbase", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.coinbase.com/trade" },
   { name: "Kraken", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.kraken.com/" },
