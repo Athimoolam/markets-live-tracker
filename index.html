@@ -19,54 +19,46 @@
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 12px 8px;
+      padding: 15px 15px;
       min-height: 100vh;
     }
     .container {
-      max-width: 1700px; /* slightly wider to fit new column */
+      max-width: 1600px;
       margin: 0 auto;
     }
     h1 {
       text-align: center;
       color: var(--accent);
-      margin: 8px 0 6px;
-      font-size: 1.8em;
+      margin: 10px 0 8px;
+      font-size: 1.9em;
     }
     .clock {
       text-align: center;
-      font-size: 1.05em;
-      margin-bottom: 10px;
+      font-size: 1.1em;
+      margin-bottom: 15px;
       color: #66ff99;
     }
-    .split {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
     .panel {
-      flex: 1 1 700px;
-      min-width: 550px;
       background: var(--card);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
     }
     .panel h2 {
       margin: 0;
-      padding: 8px 12px;
+      padding: 10px 14px;
       background: #0d1b40;
       color: #ffcc00;
-      font-size: 1.15em;
+      font-size: 1.2em;
       text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.91em;
+      font-size: 0.93em;
     }
     th, td {
-      padding: 7px 9px;
+      padding: 8px 10px;
       text-align: left;
       border-bottom: 1px solid #333;
     }
@@ -78,10 +70,10 @@
     .closed  { background: var(--red)   !important; color: white; }
     .weekend { background: #424242 !important; }
     .always-open { background: #1b5e20 !important; color: white; }
-    .countdown { font-size: 0.86em; color: #a0d0ff; white-space: nowrap; }
+    .countdown { font-size: 0.88em; color: #a0d0ff; white-space: nowrap; }
     .local-time-cell {
       white-space: nowrap;
-      font-size: 0.88em;
+      font-size: 0.9em;
       min-width: 140px;
     }
     .status-cell {
@@ -99,6 +91,11 @@
     .positive { color: #34d399; }
     .negative { color: #f87171; }
     .zero     { color: #cbd5e1; }
+    .open-close-cell {
+      min-width: 130px;           /* wider for your-time open/close */
+      white-space: nowrap;
+      text-align: center;
+    }
     .exchange-name a {
       color: var(--link);
       text-decoration: none;
@@ -126,42 +123,22 @@
     Your Time: <span id="localTime"></span> | UTC: <span id="utcTime"></span>
   </div>
 
-  <div class="split">
-    <div class="panel">
-      <h2>Markets Overview</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Exchange</th>
-            <th>Local Hours</th>
-            <th>Current Local</th>
-            <th>Time Diff</th>
-            <th>Open–Close (your time)</th>
-            <th>Status</th>
-            <th>Next</th>
-          </tr>
-        </thead>
-        <tbody id="leftBody"></tbody>
-      </table>
-    </div>
-
-    <div class="panel">
-      <h2>Markets Overview (Duplicate)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Exchange</th>
-            <th>Local Hours</th>
-            <th>Current Local</th>
-            <th>Time Diff</th>
-            <th>Open–Close (your time)</th>
-            <th>Status</th>
-            <th>Next</th>
-          </tr>
-        </thead>
-        <tbody id="rightBody"></tbody>
-      </table>
-    </div>
+  <div class="panel">
+    <h2>Markets Overview</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Exchange</th>
+          <th>Local Hours</th>
+          <th>Current Local</th>
+          <th>Time Diff</th>
+          <th>Open–Close (your time)</th>
+          <th>Status</th>
+          <th>Next</th>
+        </tr>
+      </thead>
+      <tbody id="marketBody"></tbody>
+    </table>
   </div>
 </div>
 
@@ -259,8 +236,8 @@ function renderClock() {
   document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
 }
 
-// Render panel
-function renderPanel(bodyId) {
+// Render single panel
+function renderMarkets() {
   const n = new Date();
   const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
   const day = n.getUTCDay();
@@ -296,19 +273,18 @@ function renderPanel(bodyId) {
         <td class="small-note">${ex.note || '—'}</td>
         <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
         <td class="diff-cell ${diffClass}">${diffStr}</td>
-        <td>${localOpen} – ${localClose}</td>
+        <td class="open-close-cell">${localOpen} – ${localClose}</td>
         <td class="status-cell"><strong>${info.status}</strong></td>
         <td class="countdown">${info.countdown}</td>
       </tr>`;
   });
 
-  document.getElementById(bodyId).innerHTML = html;
+  document.getElementById("marketBody").innerHTML = html;
 }
 
 function update() {
   renderClock();
-  renderPanel("leftBody");
-  renderPanel("rightBody");
+  renderMarkets();
 }
 
 update();
