@@ -1,4 +1,5 @@
 # Markets Live Tracker
+<image-card alt="Markets Live Tracker Screenshot" src="screenshot.png" ></image-card>
 
 A simple, local/offline-capable HTML dashboard to monitor:
 
@@ -24,6 +25,6 @@ A simple, local/offline-capable HTML dashboard to monitor:
 MIT – free to use, modify, share.
 
 Made in 2026
-<image-card alt="Screenshot of the Markets Live Tracker" src="screenshot.png" ></image-card>
+
 ## Live Demo
 https://athimoolam.github.io/markets-live-tracker/
