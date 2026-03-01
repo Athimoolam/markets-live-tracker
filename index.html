@@ -19,23 +19,23 @@
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 15px 10px;
+      padding: 12px 10px;
       min-height: 100vh;
     }
     .container {
-      max-width: 1600px;
+      max-width: 1700px; /* slightly wider for 7 columns */
       margin: 0 auto;
     }
     h1 {
       text-align: center;
       color: var(--accent);
       margin: 10px 0 8px;
-      font-size: 1.9em;
+      font-size: 1.8em;
     }
     .clock {
       text-align: center;
-      font-size: 1.1em;
-      margin-bottom: 15px;
+      font-size: 1.05em;
+      margin-bottom: 12px;
       color: #66ff99;
     }
     .panel {
@@ -46,19 +46,19 @@
     }
     .panel h2 {
       margin: 0;
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: #0d1b40;
       color: #ffcc00;
-      font-size: 1.2em;
+      font-size: 1.15em;
       text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.93em;
+      font-size: 0.9em;
     }
     th, td {
-      padding: 8px 10px;
+      padding: 6px 8px;
       text-align: left;
       border-bottom: 1px solid #333;
     }
@@ -70,22 +70,27 @@
     .closed  { background: var(--red)   !important; color: white; }
     .weekend { background: #424242 !important; }
     .always-open { background: #1b5e20 !important; color: white; }
-    .countdown { font-size: 0.88em; color: #a0d0ff; white-space: nowrap; }
+    .countdown { font-size: 0.86em; color: #a0d0ff; white-space: nowrap; }
     .local-time-cell {
       white-space: nowrap;
-      font-size: 0.9em;
-      min-width: 140px;
+      min-width: 130px;
+    }
+    .duration-cell {
+      min-width: 70px;
+      text-align: center;
+      font-weight: bold;
+      color: #94a3b8;
     }
     .status-cell {
-      min-width: 110px;
+      min-width: 100px;
       white-space: nowrap;
     }
     .diff-cell {
-      min-width: 90px;
+      min-width: 80px;
       white-space: nowrap;
     }
     .open-close-cell {
-      min-width: 130px;
+      min-width: 120px;
       white-space: nowrap;
     }
     .exchange-name a {
@@ -103,7 +108,7 @@
       color: #80ffaa !important;
       font-weight: bold;
       text-align: center;
-      padding: 6px !important;
+      padding: 5px !important;
     }
   </style>
 </head>
@@ -122,6 +127,7 @@
         <tr>
           <th>Exchange</th>
           <th>Local Hours</th>
+          <th>Duration</th>
           <th>Current Local</th>
           <th>Time Diff</th>
           <th>Open–Close (your time)</th>
@@ -135,30 +141,30 @@
 </div>
 
 <script>
-// DATA – NSE/BSE short, ordered earliest to latest open
+// DATA – ordered earliest → latest UTC open
 const ALL_EXCHANGES = [
-  { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/" },
-  { name: "SGX", city: "Singapore", utcOpen: 1, utcClose: 9, note: "09:00–17:00 SGT", timeZone: "Asia/Singapore", url: "https://www.sgx.com/" },
-  { name: "SSE", city: "Shanghai", utcOpen: 1.5, utcClose: 7, note: "09:30–15:00 CST", timeZone: "Asia/Shanghai", url: "http://english.sse.com.cn/" },
-  { name: "HKEX", city: "Hong Kong", utcOpen: 1.5, utcClose: 8, note: "09:30–16:00 HKT", timeZone: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/" },
-  { name: "ASX", city: "Sydney", utcOpen: 22, utcClose: 8, note: "10:00–16:00 AEDT/AEST", timeZone: "Australia/Sydney", url: "https://www.asx.com.au/" },
-  { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
-  { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
-  { name: "DFM Dubai", city: "Dubai", utcOpen: 6, utcClose: 12, note: "10:00–16:00 GST", timeZone: "Asia/Dubai", url: "https://www.dfm.ae/" },
-  { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 8, utcClose: 16.5, note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Oslo Børs", city: "Oslo", utcOpen: 8, utcClose: 15.5, note: "09:00–16:30 CET approx.", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo" },
-  { name: "Nasdaq Iceland", city: "Reykjavik", utcOpen: 9.5, utcClose: 15.4167, note: "09:30–15:25 GMT", timeZone: "Atlantic/Reykjavik", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", url: "https://www.londonstockexchange.com/" },
-  { name: "Euronext Paris", city: "Paris", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Paris", url: "https://www.euronext.com/en/markets/paris" },
-  { name: "Frankfurt (DAX)", city: "Frankfurt", utcOpen: 7, utcClose: 19, note: "08:00–20:00 CET", timeZone: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/" },
-  { name: "NYSE / NASDAQ", city: "New York", utcOpen: 14.5, utcClose: 21, note: "09:30–16:00 ET", timeZone: "America/New_York", url: "https://www.nyse.com/" },
-  { name: "Binance", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.binance.com/en/trade" },
-  { name: "Coinbase", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.coinbase.com/trade" },
-  { name: "Kraken", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.kraken.com/" },
-  { name: "Bitstamp", city: "Europe/Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bitstamp.net/" },
-  { name: "Bybit / OKX", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bybit.com/" }
+  { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/", duration: "6h" },
+  { name: "SGX", city: "Singapore", utcOpen: 1, utcClose: 9, note: "09:00–17:00 SGT", timeZone: "Asia/Singapore", url: "https://www.sgx.com/", duration: "8h" },
+  { name: "SSE", city: "Shanghai", utcOpen: 1.5, utcClose: 7, note: "09:30–15:00 CST", timeZone: "Asia/Shanghai", url: "http://english.sse.com.cn/", duration: "5.5h" },
+  { name: "HKEX", city: "Hong Kong", utcOpen: 1.5, utcClose: 8, note: "09:30–16:00 HKT", timeZone: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/", duration: "6.5h" },
+  { name: "ASX", city: "Sydney", utcOpen: 22, utcClose: 8, note: "10:00–16:00 AEDT/AEST", timeZone: "Australia/Sydney", url: "https://www.asx.com.au/", duration: "8h" },
+  { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/", duration: "6.25h" },
+  { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/", duration: "6.25h" },
+  { name: "DFM Dubai", city: "Dubai", utcOpen: 6, utcClose: 12, note: "10:00–16:00 GST", timeZone: "Asia/Dubai", url: "https://www.dfm.ae/", duration: "6h" },
+  { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/", duration: "8.5h" },
+  { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/", duration: "8h" },
+  { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 8, utcClose: 16.5, note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/", duration: "8.5h" },
+  { name: "Oslo Børs", city: "Oslo", utcOpen: 8, utcClose: 15.5, note: "09:00–16:30 CET approx.", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo", duration: "7.5h" },
+  { name: "Nasdaq Iceland", city: "Reykjavik", utcOpen: 9.5, utcClose: 15.4167, note: "09:30–15:25 GMT", timeZone: "Atlantic/Reykjavik", nordic: true, url: "https://www.nasdaqomxnordic.com/", duration: "5.92h" },
+  { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", url: "https://www.londonstockexchange.com/", duration: "8.5h" },
+  { name: "Euronext Paris", city: "Paris", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Paris", url: "https://www.euronext.com/en/markets/paris", duration: "8.5h" },
+  { name: "Frankfurt (DAX)", city: "Frankfurt", utcOpen: 7, utcClose: 19, note: "08:00–20:00 CET", timeZone: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/", duration: "12h" },
+  { name: "NYSE / NASDAQ", city: "New York", utcOpen: 14.5, utcClose: 21, note: "09:30–16:00 ET", timeZone: "America/New_York", url: "https://www.nyse.com/", duration: "6.5h" },
+  { name: "Binance", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.binance.com/en/trade", duration: "24h" },
+  { name: "Coinbase", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.coinbase.com/trade", duration: "24h" },
+  { name: "Kraken", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.kraken.com/", duration: "24h" },
+  { name: "Bitstamp", city: "Europe/Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bitstamp.net/", duration: "24h" },
+  { name: "Bybit / OKX", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bybit.com/", duration: "24h" }
 ];
 
 // Helpers
@@ -223,6 +229,15 @@ function getUserOffsetHours() {
   return - (new Date().getTimezoneOffset() / 60);
 }
 
+function calculateDuration(open, close) {
+  if (open === null || close === null) return '24h';
+  let diff = close - open;
+  if (diff < 0) diff += 24;
+  const h = Math.floor(diff);
+  const m = Math.round((diff - h) * 60);
+  return m === 0 ? `${h}h` : `${h}.${m/60}h`;
+}
+
 // Render clock
 function renderClock() {
   const n = new Date();
@@ -261,10 +276,13 @@ function renderMarkets() {
     const diffStr = getTimeDiffString(ex.timeZone);
     const diffClass = diffStr.startsWith('+') ? 'positive' : diffStr.startsWith('-') ? 'negative' : 'zero';
 
+    const duration = calculateDuration(ex.utcOpen, ex.utcClose);
+
     html += `
       <tr class="${info.cls}">
         ${nameCell}
         <td class="small-note">${ex.note || '—'}</td>
+        <td class="duration-cell">${duration}</td>
         <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
         <td class="diff-cell ${diffClass}">${diffStr}</td>
         <td class="open-close-cell">${localOpen} – ${localClose}</td>
