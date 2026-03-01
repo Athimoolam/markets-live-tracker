@@ -118,16 +118,15 @@
   </div>
 
   <div class="split">
-    <!-- Left panel -->
     <div class="panel">
       <h2>Markets Overview</h2>
       <table>
         <thead>
           <tr>
             <th>Exchange</th>
-            <th>Open–Close (UTC)</th>
             <th>Local Hours</th>
             <th>Current Local</th>
+            <th>Open–Close (your time)</th>
             <th>Status</th>
             <th>Next</th>
           </tr>
@@ -136,16 +135,15 @@
       </table>
     </div>
 
-    <!-- Right panel (duplicate) -->
     <div class="panel">
       <h2>Markets Overview (Duplicate)</h2>
       <table>
         <thead>
           <tr>
             <th>Exchange</th>
-            <th>Open–Close (UTC)</th>
             <th>Local Hours</th>
             <th>Current Local</th>
+            <th>Open–Close (your time)</th>
             <th>Status</th>
             <th>Next</th>
           </tr>
@@ -157,7 +155,7 @@
 </div>
 
 <script>
-// DATA – NSE/BSE shortened
+// DATA (NSE/BSE short names)
 const ALL_EXCHANGES = [
   { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
   { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, region: "Asia", note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
@@ -165,21 +163,15 @@ const ALL_EXCHANGES = [
   { name: "SSE", city: "Shanghai", utcOpen: 1.5, utcClose: 7, region: "Asia", note: "09:30–15:00 CST", timeZone: "Asia/Shanghai", url: "http://english.sse.com.cn/" },
   { name: "HKEX", city: "Hong Kong", utcOpen: 1.5, utcClose: 8, region: "Asia", note: "09:30–16:00 HKT", timeZone: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/" },
   { name: "ASX", city: "Sydney", utcOpen: 22, utcClose: 8, region: "Asia", note: "10:00–16:00 AEDT/AEST", timeZone: "Australia/Sydney", url: "https://www.asx.com.au/" },
-
-  // Nordic
   { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, region: "Europe", note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
   { name: "Oslo Børs (Euronext)", city: "Oslo", utcOpen: 8, utcClose: 15.5, region: "Europe", note: "09:00–16:30 CET approx.", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo" },
   { name: "Nasdaq Iceland", city: "Reykjavik", utcOpen: 9.5, utcClose: 15.4167, region: "Europe", note: "09:30–15:25 GMT", timeZone: "Atlantic/Reykjavik", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-
-  // Other Europe & US
   { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", url: "https://www.londonstockexchange.com/" },
   { name: "Euronext Paris (CAC 40)", city: "Paris", utcOpen: 8, utcClose: 16.5, region: "Europe", note: "09:00–17:30 CET", timeZone: "Europe/Paris", url: "https://www.euronext.com/en/markets/paris" },
   { name: "Frankfurt (DAX/Xetra)", city: "Frankfurt", utcOpen: 7, utcClose: 19, region: "Europe", note: "08:00–20:00 CET (extended)", timeZone: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/" },
   { name: "NYSE / NASDAQ", city: "New York", utcOpen: 14.5, utcClose: 21, region: "US", note: "09:30–16:00 ET", timeZone: "America/New_York", url: "https://www.nyse.com/" },
-
-  // Crypto
   { name: "Binance", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.binance.com/en/trade" },
   { name: "Coinbase", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.coinbase.com/trade" },
   { name: "Kraken", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.kraken.com/" },
@@ -187,13 +179,16 @@ const ALL_EXCHANGES = [
   { name: "Bybit / OKX", city: "Global", utcOpen: null, utcClose: null, region: "crypto", note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bybit.com/" }
 ];
 
-// Helpers (unchanged)
+// Helpers
 function pad(n) { return n.toString().padStart(2, '0'); }
 
-function formatHour(h) {
+function formatHour(h, localOffsetHours = 0) {
   if (h === null) return '—';
-  const hh = Math.floor(h);
-  const mm = Math.round((h % 1) * 60);
+  let adjusted = h + localOffsetHours;
+  if (adjusted < 0) adjusted += 24;
+  if (adjusted >= 24) adjusted -= 24;
+  const hh = Math.floor(adjusted);
+  const mm = Math.round((adjusted % 1) * 60);
   return `${pad(hh)}:${pad(mm)}`;
 }
 
@@ -231,17 +226,24 @@ function getStatusInfo(utcH, day, open, close, isCrypto = false) {
   };
 }
 
-// Rendering
+// Get user's local offset in hours from UTC (negative for east of UTC)
+function getUserOffsetHours() {
+  return - (new Date().getTimezoneOffset() / 60);
+}
+
+// Render clock
 function renderClock() {
   const n = new Date();
   document.getElementById("localTime").textContent = n.toLocaleTimeString([], {hour12:false}) + " (" + Intl.DateTimeFormat().resolvedOptions().timeZone + ")";
   document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
 }
 
+// Render panel (both left and right use same logic)
 function renderPanel(bodyId) {
   const n = new Date();
   const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
   const day = n.getUTCDay();
+  const userOffset = getUserOffsetHours(); // hours offset from UTC
   let html = "";
   let nordic = false;
 
@@ -261,12 +263,16 @@ function renderPanel(bodyId) {
       ? `<td class="exchange-name"><a href="${ex.url}" target="_blank" rel="noopener noreferrer">${ex.name}</a></td>`
       : `<td>${ex.name}</td>`;
 
+    // Open–Close in user's local time
+    const localOpen = formatHour(ex.utcOpen, userOffset);
+    const localClose = formatHour(ex.utcClose, userOffset);
+
     html += `
       <tr class="${info.cls}">
         ${nameCell}
-        <td>${formatHour(ex.utcOpen)} – ${formatHour(ex.utcClose)}</td>
         <td class="small-note">${ex.note || '—'}</td>
         <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
+        <td>${localOpen} – ${localClose}</td>
         <td class="status-cell"><strong>${info.status}</strong></td>
         <td class="countdown">${info.countdown}</td>
       </tr>`;
