@@ -3,115 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Markets • Live Status</title>
+  <title>World Markets Live</title>
   <style>
-    :root {
-      --bg: #0a0a1f;
-      --card: #1c1c3a;
-      --text: #ddd;
-      --accent: #bb86fc;
-      --green: #2e7d32;
-      --red:   #c62828;
-      --link:  #66d9ff;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 12px 10px;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    h1 {
+    :root { --bg: #0a0a1f; --card: #1c1c3a; --text: #ddd; --accent: #bb86fc; --green: #4ade80; --red: #f87171; --link: #66d9ff; }
+    
+    /* Overall Page Reduction & Zero Top Padding */
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0 10px 10px 10px; }
+    .container { max-width: 1300px; margin: 0 auto; }
+    
+    /* App Heading - Tightened Margin */
+    h1.app-title {
       text-align: center;
-      color: var(--accent);
-      margin: 10px 0 8px;
-      font-size: 1.8em;
+      color: #fff;
+      font-size: 1.7em;
+      margin: 10px 0 2px 0; /* Minimal top/bottom margin */
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(187, 134, 252, 0.4);
     }
-    .clock {
-      text-align: center;
-      font-size: 1.05em;
-      margin-bottom: 12px;
-      color: #66ff99;
+    
+    .clock { text-align: center; font-size: 0.95em; margin-bottom: 12px; color: #66ff99; font-family: monospace; opacity: 0.9; }
+    .panel { background: var(--card); border-radius: 8px; overflow-x: auto; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+    table { width: 100%; border-collapse: collapse; min-width: 1050px; }
+    
+    /* Font 1.0em with Tight Padding */
+    th, td { padding: 7px 12px; text-align: left; border-bottom: 1px solid #2d2d4d; white-space: nowrap; font-size: 1.0em; }
+    th { background: #0d1b40; color: #ffcc00; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .subheader { 
+      background: linear-gradient(90deg, #162447 0%, #1f4068 100%) !important; 
+      color: #ffffff !important; 
+      font-size: 1.0em; 
+      text-align: center; 
+      font-weight: 700; 
+      letter-spacing: 1.5px;
+      height: 34px;
     }
-    .panel {
-      background: var(--card);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-    }
-    .panel h2 {
-      margin: 0;
-      padding: 8px 12px;
-      background: #0d1b40;
-      color: #ffcc00;
-      font-size: 1.15em;
-      text-align: center;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9em;
-    }
-    th, td {
-      padding: 6px 8px;
-      text-align: left;
-      border-bottom: 1px solid #333;
-    }
-    th {
-      background: #0d1b40;
-      color: #ffcc00;
-    }
-    .open    { background: var(--green) !important; font-weight: bold; color: white; }
-    .closed  { background: var(--red)   !important; color: white; }
-    .weekend { background: #424242 !important; }
-    .always-open { background: #1b5e20 !important; color: white; }
-    .countdown { font-size: 0.86em; color: #a0d0ff; white-space: nowrap; }
-    .local-time-cell { white-space: nowrap; min-width: 130px; }
-    .duration-cell { min-width: 70px; white-space: nowrap; text-align: left; }
-    .status-cell { min-width: 100px; white-space: nowrap; }
-    .diff-cell { min-width: 80px; white-space: nowrap; font-weight: bold; }
-    .positive { color: #34d399; }
-    .negative { color: #f87171; }
-    .zero     { color: #cbd5e1; }
-    .open-close-cell { min-width: 120px; white-space: nowrap; }
+
+    .status-open { color: var(--green); font-weight: bold; }
+    .status-closed { color: var(--red); font-weight: bold; }
+    .status-weekend { color: #6b7280; font-style: italic; }
     .exchange-name a { color: var(--link); text-decoration: none; font-weight: bold; }
-    .exchange-name a:hover { text-decoration: underline; color: #99e6ff; }
-    tr:hover { background: rgba(255,255,255,0.06); }
-    .subheader {
-      background: #0d1b40 !important;
-      color: #80ffaa !important;
-      font-weight: bold;
-      text-align: center !important;
-      padding: 5px !important;
-    }
+    .city-label { color: #aaa; font-size: 0.8em; margin-left: 8px; font-weight: normal; }
+    tr:hover { background: rgba(255,255,255,0.05); }
+    .cd-val { font-family: 'Courier New', monospace; font-weight: bold; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>World Markets Live</h1>
-  <div class="clock">
-    Your Time: <span id="localTime"></span> | UTC: <span id="utcTime"></span>
-  </div>
-
+  <h1 class="app-title">World Markets Live</h1>
+  <div class="clock">YOUR TIME: <span id="localTime"></span> | UTC: <span id="utcTime"></span></div>
+  
   <div class="panel">
-    <h2>Markets Overview</h2>
     <table>
       <thead>
         <tr>
           <th>Exchange</th>
-          <th>Local Hours</th>
-          <th>Duration</th>
-          <th>Current Local</th>
-          <th>Time Diff</th>
-          <th>Open–Close (your time)</th>
+          <th>Opening Hours (Local)</th>
+          <th>Session</th>
+          <th>Local Time</th>
+          <th>Your Diff</th>
           <th>Status</th>
-          <th>Next</th>
+          <th>To Open</th>
+          <th>To Close</th>
         </tr>
       </thead>
       <tbody id="marketBody"></tbody>
@@ -120,223 +74,111 @@
 </div>
 
 <script>
-// DATA – Paris, Frankfurt, LSE, NYSE/NASDAQ now also marked as nordic: true
-const ALL_EXCHANGES = [
-  { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/" },
-  { name: "SGX", city: "Singapore", utcOpen: 1, utcClose: 9, note: "09:00–17:00 SGT", timeZone: "Asia/Singapore", url: "https://www.sgx.com/" },
-  { name: "SSE", city: "Shanghai", utcOpen: 1.5, utcClose: 7, note: "09:30–15:00 CST", timeZone: "Asia/Shanghai", url: "http://english.sse.com.cn/" },
-  { name: "HKEX", city: "Hong Kong", utcOpen: 1.5, utcClose: 8, note: "09:30–16:00 HKT", timeZone: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/" },
-  { name: "ASX", city: "Sydney", utcOpen: 0, utcClose: 6, note: "10:00–16:00 AEST/AEDT (DST varies)", timeZone: "Australia/Sydney", url: "https://www.asx.com.au/" },
-  { name: "NSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.nseindia.com/" },
-  { name: "BSE India", city: "Mumbai", utcOpen: 3.75, utcClose: 10, note: "09:15–15:30 IST", timeZone: "Asia/Kolkata", url: "https://www.bseindia.com/" },
-  { name: "DFM Dubai", city: "Dubai", utcOpen: 6, utcClose: 12, note: "10:00–16:00 GST", timeZone: "Asia/Dubai", url: "https://www.dfm.ae/" },
-
-  // Nordic block – expanded to include Paris, Frankfurt, LSE, NYSE/NASDAQ
-  { name: "Nasdaq Helsinki", city: "Helsinki", utcOpen: 7, utcClose: 15.5, note: "10:00–18:30 EET", timeZone: "Europe/Helsinki", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Nasdaq Stockholm", city: "Stockholm", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Stockholm", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Nasdaq Copenhagen", city: "Copenhagen", utcOpen: 8, utcClose: 16, note: "09:00–17:00 CET", timeZone: "Europe/Copenhagen", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "Oslo Børs", city: "Oslo", utcOpen: 8, utcClose: 15.5, note: "09:00–16:30 CET approx.", timeZone: "Europe/Oslo", nordic: true, url: "https://www.euronext.com/en/markets/oslo" },
-  { name: "Nasdaq Iceland", city: "Reykjavik", utcOpen: 9.5, utcClose: 15.4167, note: "09:30–15:25 GMT", timeZone: "Atlantic/Reykjavik", nordic: true, url: "https://www.nasdaqomxnordic.com/" },
-  { name: "LSE", city: "London", utcOpen: 8, utcClose: 16.5, note: "08:00–16:30 GMT/BST", timeZone: "Europe/London", nordic: true, url: "https://www.londonstockexchange.com/" },
-  { name: "Euronext Paris", city: "Paris", utcOpen: 8, utcClose: 16.5, note: "09:00–17:30 CET", timeZone: "Europe/Paris", nordic: true, url: "https://www.euronext.com/en/markets/paris" },
-  { name: "Frankfurt (DAX)", city: "Frankfurt", utcOpen: 7, utcClose: 19, note: "08:00–20:00 CET", timeZone: "Europe/Berlin", nordic: true, url: "https://www.boerse-frankfurt.de/" },
-  { name: "NYSE / NASDAQ", city: "New York", utcOpen: 14.5, utcClose: 21, note: "09:30–16:00 ET", timeZone: "America/New_York", nordic: true, url: "https://www.nyse.com/" },
-
-  // Crypto (always last)
-  { name: "Binance", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.binance.com/en/trade" },
-  { name: "Coinbase", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.coinbase.com/trade" },
-  { name: "Kraken", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.kraken.com/" },
-  { name: "Bitstamp", city: "Europe/Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bitstamp.net/" },
-  { name: "Bybit / OKX", city: "Global", utcOpen: null, utcClose: null, note: "24/7", timeZone: null, isCrypto: true, url: "https://www.bybit.com/" }
+const EXCHANGES = [
+  // ASIA-PACIFIC
+  { name: "ASX", city: "Sydney", open: "10:00", close: "16:00", tz: "Australia/Sydney", url: "https://www.asx.com.au/", group: "ASIA-PACIFIC" },
+  { name: "TSE", city: "Tokyo", open: "09:00", close: "15:00", tz: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/", group: "ASIA-PACIFIC" },
+  { name: "SGX", city: "Singapore", open: "09:00", close: "17:00", tz: "Asia/Singapore", url: "https://www.sgx.com/", group: "ASIA-PACIFIC" },
+  { name: "SSE", city: "Shanghai", open: "09:30", close: "15:00", tz: "Asia/Shanghai", url: "http://english.sse.com.cn/", group: "ASIA-PACIFIC" },
+  { name: "HKEX", city: "Hong Kong", open: "09:30", close: "16:00", tz: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/", group: "ASIA-PACIFIC" },
+  { name: "NSE", city: "Delhi", open: "09:15", close: "15:30", tz: "Asia/Kolkata", url: "https://www.nseindia.com/", group: "ASIA-PACIFIC" },
+  { name: "BSE", city: "Mumbai", open: "09:15", close: "15:30", tz: "Asia/Kolkata", url: "https://www.bseindia.com/", group: "ASIA-PACIFIC" },
+  { name: "DFM", city: "Dubai", open: "10:00", close: "16:00", tz: "Asia/Dubai", url: "https://www.dfm.ae/", group: "ASIA-PACIFIC" },
+  
+  // EMEA & NORDICS
+  { name: "Nasdaq HEL", city: "Helsinki", open: "10:00", close: "18:30", tz: "Europe/Helsinki", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
+  { name: "DAX", city: "Frankfurt", open: "08:00", close: "20:00", tz: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/", group: "EMEA & NORDICS" },
+  { name: "Euronext PAR", city: "Paris", open: "09:00", close: "17:30", tz: "Europe/Paris", url: "https://www.euronext.com/", group: "EMEA & NORDICS" },
+  { name: "Nasdaq STO", city: "Stockholm", open: "09:00", close: "17:30", tz: "Europe/Stockholm", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
+  { name: "Nasdaq CPH", city: "Copenhagen", open: "09:00", close: "17:00", tz: "Europe/Copenhagen", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
+  { name: "Oslo Børs", city: "Oslo", open: "09:00", close: "16:30", tz: "Europe/Oslo", url: "https://www.euronext.com/en/markets/oslo", group: "EMEA & NORDICS" },
+  { name: "LSE", city: "London", open: "08:00", close: "16:30", tz: "Europe/London", url: "https://www.londonstockexchange.com/", group: "EMEA & NORDICS" },
+  { name: "Nasdaq ICE", city: "Iceland", open: "09:30", close: "15:30", tz: "Atlantic/Reykjavik", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
+  
+  // AMERICAS & CRYPTO
+  { name: "NYSE/NASDAQ", city: "New York", open: "09:30", close: "16:00", tz: "America/New_York", url: "https://www.nyse.com/", group: "AMERICAS & CRYPTO" },
+  { name: "Binance", city: "Global", isCrypto: true, url: "https://www.binance.com/", group: "AMERICAS & CRYPTO" },
+  { name: "Coinbase", city: "Global", isCrypto: true, url: "https://www.coinbase.com/", group: "AMERICAS & CRYPTO" },
+  { name: "Kraken", city: "Global", isCrypto: true, url: "https://www.kraken.com/", group: "AMERICAS & CRYPTO" },
+  { name: "Bybit", city: "Global", isCrypto: true, url: "https://www.bybit.com/", group: "AMERICAS & CRYPTO" }
 ];
 
-// Helpers (unchanged)
-function pad(n) { return n.toString().padStart(2, '0'); }
-
-function formatHour(h, offsetHours = 0) {
-  if (h === null) return '—';
-  let adjusted = h + offsetHours;
-  if (adjusted < 0) adjusted += 24;
-  if (adjusted >= 24) adjusted -= 24;
-  const hh = Math.floor(adjusted);
-  const mm = Math.round((adjusted % 1) * 60);
-  return `${pad(hh)}:${pad(mm)}`;
-}
-
-function getLocalTime(tz) {
-  if (!tz) return 'Global / 24/7';
-  const now = new Date();
-  return now.toLocaleTimeString([], {
-    timeZone: tz,
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit'
-  }) + ' ' + tz.split('/').pop().replace(/_/g, ' ');
-}
-
-function getTimeDiffNumeric(tz) {
-  if (!tz) return 0;
-  const now = new Date();
-  const localDate = new Date(now.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
-  const marketDate = new Date(now.toLocaleString('en-US', { timeZone: tz }));
-  return (marketDate - localDate) / (1000 * 60 * 60);
-}
-
-function getTimeDiffString(tz) {
-  const diff = getTimeDiffNumeric(tz);
-  if (diff === 0) return '0h (same)';
-  const rounded = Math.round(diff);
-  return rounded > 0 ? `+${rounded}h` : `${rounded}h`;
-}
-
-function isWeekend(d) { return d === 0 || d === 6; }
-
-function getStatusInfo(utcH, day, open, close, isCrypto = false) {
-  if (isCrypto) return { status: "24/7 OPEN", cls: "always-open", countdown: "Always active" };
-
-  if (isWeekend(day)) return { status: "Weekend", cls: "weekend", countdown: "Next: Monday" };
-
-  const overnight = close < open;
-  const isOpen = overnight ? (utcH >= open || utcH < close) : (utcH >= open && utcH < close);
-
-  let diff = isOpen ? close - utcH : open - utcH;
-  if (diff < 0) diff += 24;
-  const h = Math.floor(diff);
-  const m = Math.round((diff - h) * 60);
-  const when = isOpen ? "Closes" : "Opens";
-
-  return {
-    status: isOpen ? "OPEN" : "CLOSED",
-    cls: isOpen ? "open" : "closed",
-    countdown: `${when} in ${h}h ${m}m`
-  };
-}
-
-function getUserOffsetHours() {
-  return - (new Date().getTimezoneOffset() / 60);
-}
-
 function calculateDuration(open, close) {
-  if (open === null || close === null) return '24h';
-  let diff = close - open;
-  if (diff < 0) diff += 24;
-  const h = Math.floor(diff);
-  const m = Math.round((diff - h) * 60);
-  return m === 0 ? `${h}h` : `${h}h ${m}m`;
-}
-
-// Render clock
-function renderClock() {
-  const n = new Date();
-  document.getElementById("localTime").textContent = n.toLocaleTimeString([], {hour12:false}) + " (" + Intl.DateTimeFormat().resolvedOptions().timeZone + ")";
-  document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
-}
-
-// Render markets – two blocks: World Markets (non-Nordic/non-crypto), Nordic Markets (expanded), Crypto
-function renderMarkets() {
-  const n = new Date();
-  const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
-  const day = n.getUTCDay();
-  const userOffset = getUserOffsetHours();
-  let html = "";
-
-  // Split groups
-  const worldEx = ALL_EXCHANGES.filter(ex => !ex.nordic && !ex.isCrypto);
-  const nordicEx = ALL_EXCHANGES.filter(ex => ex.nordic);
-  const cryptoEx = ALL_EXCHANGES.filter(ex => ex.isCrypto);
-
-  // Sort each group by Time Diff descending (most ahead first)
-  const sortFn = (a, b) => getTimeDiffNumeric(b.timeZone) - getTimeDiffNumeric(a.timeZone);
-  worldEx.sort(sortFn);
-  nordicEx.sort(sortFn);
-
-  // Block 1: World Markets
-  if (worldEx.length > 0) {
-    html += `<tr class="subheader"><td colspan="7">World Markets</td></tr>`;
-    worldEx.forEach(ex => {
-      const info = getStatusInfo(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
-      const nameCell = ex.url ? `<td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a></td>` : `<td>${ex.name}</td>`;
-      const localOpen = formatHour(ex.utcOpen, userOffset);
-      const localClose = formatHour(ex.utcClose, userOffset);
-      const diffStr = getTimeDiffString(ex.timeZone);
-      const diffNumeric = getTimeDiffNumeric(ex.timeZone);
-      const diffClass = diffNumeric > 0 ? 'positive' : diffNumeric < 0 ? 'negative' : 'zero';
-      const duration = calculateDuration(ex.utcOpen, ex.utcClose);
-
-      html += `
-        <tr class="${info.cls}">
-          ${nameCell}
-          <td class="small-note">${ex.note || '—'}</td>
-          <td class="duration-cell">${duration}</td>
-          <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
-          <td class="diff-cell ${diffClass}">${diffStr}</td>
-          <td class="open-close-cell">${localOpen} – ${localClose}</td>
-          <td class="status-cell"><strong>${info.status}</strong></td>
-          <td class="countdown">${info.countdown}</td>
-        </tr>`;
-    });
-  }
-
-  // Block 2: Nordic Markets (now includes Paris, Frankfurt, LSE, NYSE)
-  if (nordicEx.length > 0) {
-    html += `<tr class="subheader"><td colspan="7">Nordic Markets</td></tr>`;
-    nordicEx.forEach(ex => {
-      const info = getStatusInfo(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
-      const nameCell = ex.url ? `<td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a></td>` : `<td>${ex.name}</td>`;
-      const localOpen = formatHour(ex.utcOpen, userOffset);
-      const localClose = formatHour(ex.utcClose, userOffset);
-      const diffStr = getTimeDiffString(ex.timeZone);
-      const diffNumeric = getTimeDiffNumeric(ex.timeZone);
-      const diffClass = diffNumeric > 0 ? 'positive' : diffNumeric < 0 ? 'negative' : 'zero';
-      const duration = calculateDuration(ex.utcOpen, ex.utcClose);
-
-      html += `
-        <tr class="${info.cls}">
-          ${nameCell}
-          <td class="small-note">${ex.note || '—'}</td>
-          <td class="duration-cell">${duration}</td>
-          <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
-          <td class="diff-cell ${diffClass}">${diffStr}</td>
-          <td class="open-close-cell">${localOpen} – ${localClose}</td>
-          <td class="status-cell"><strong>${info.status}</strong></td>
-          <td class="countdown">${info.countdown}</td>
-        </tr>`;
-    });
-  }
-
-  // Block 3: Crypto Exchanges
-  if (cryptoEx.length > 0) {
-    html += `<tr class="subheader"><td colspan="7">Crypto Exchanges (24/7)</td></tr>`;
-    cryptoEx.forEach(ex => {
-      const info = getStatusInfo(utcH, day, ex.utcOpen, ex.utcClose, ex.isCrypto);
-      const nameCell = ex.url ? `<td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a></td>` : `<td>${ex.name}</td>`;
-      const duration = calculateDuration(ex.utcOpen, ex.utcClose);
-
-      html += `
-        <tr class="${info.cls}">
-          ${nameCell}
-          <td class="small-note">${ex.note || '—'}</td>
-          <td class="duration-cell">${duration}</td>
-          <td class="local-time-cell">${getLocalTime(ex.timeZone)}</td>
-          <td class="diff-cell zero">—</td>
-          <td class="open-close-cell">—</td>
-          <td class="status-cell"><strong>${info.status}</strong></td>
-          <td class="countdown">${info.countdown}</td>
-        </tr>`;
-    });
-  }
-
-  document.getElementById("marketBody").innerHTML = html;
+  if (!open) return "24h";
+  const [oH, oM] = open.split(':').map(Number);
+  const [cH, cM] = close.split(':').map(Number);
+  let diffMin = (cH * 60 + cM) - (oH * 60 + oM);
+  if (diffMin < 0) diffMin += 1440;
+  return `${Math.floor(diffMin / 60)}h ${diffMin % 60}m`;
 }
 
 function update() {
-  renderClock();
-  renderMarkets();
+  const now = new Date();
+  document.getElementById('localTime').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+  document.getElementById('utcTime').textContent = now.toISOString().slice(11, 19);
+
+  let html = '';
+  let lastGroup = '';
+
+  EXCHANGES.forEach(ex => {
+    if (ex.group !== lastGroup) {
+      html += `<tr class="subheader"><td colspan="8">${ex.group}</td></tr>`;
+      lastGroup = ex.group;
+    }
+
+    let statusText = '', statusCls = '', toOpen = '—', toClose = '—', marketTimeStr = 'Global', diffStr = '0h';
+    const duration = calculateDuration(ex.open, ex.close);
+
+    if (ex.isCrypto) {
+      statusText = 'OPEN'; statusCls = 'status-open'; toClose = 'Non-stop';
+    } else {
+      const mDateString = now.toLocaleString("en-US", {timeZone: ex.tz});
+      const mDate = new Date(mDateString);
+      const day = mDate.getDay();
+      const currentMin = mDate.getHours() * 60 + mDate.getMinutes();
+      const [oH, oM] = ex.open.split(':').map(Number);
+      const [cH, cM] = ex.close.split(':').map(Number);
+      const openMin = oH * 60 + oM;
+      const closeMin = cH * 60 + cM;
+
+      marketTimeStr = mDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+      
+      const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const localOffset = new Date(now.toLocaleString("en-US", {timeZone: localTz})).getTime();
+      const marketOffset = new Date(mDateString).getTime();
+      const diffDecimal = (marketOffset - localOffset) / 3600000;
+      diffStr = (diffDecimal >= 0 ? '+' : '') + diffDecimal.toFixed(1) + 'h';
+
+      if (day === 0 || day === 6) {
+        statusText = 'WEEKEND'; statusCls = 'status-weekend'; toOpen = 'Mon';
+      } else if (currentMin >= openMin && currentMin < closeMin) {
+        statusText = 'OPEN'; statusCls = 'status-open';
+        let rem = closeMin - currentMin;
+        toClose = `<span class="cd-val">${Math.floor(rem/60)}h ${rem%60}m</span>`;
+      } else {
+        statusText = 'CLOSED'; statusCls = 'status-closed';
+        let rem = openMin - currentMin;
+        if (rem < 0) rem += 1440;
+        toOpen = `<span class="cd-val">${Math.floor(rem/60)}h ${rem%60}m</span>`;
+      }
+    }
+
+    html += `<tr>
+        <td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a><span class="city-label">${ex.city}</span></td>
+        <td style="font-size: 0.95em;">${ex.open ? ex.open + ' – ' + ex.close : '24/7'}</td>
+        <td style="color: #a0d0ff;">${duration}</td>
+        <td style="font-family: monospace; font-weight: bold;">${marketTimeStr}</td>
+        <td>${diffStr}</td>
+        <td class="${statusCls}">${statusText}</td>
+        <td style="color: #ffcc00">${toOpen}</td>
+        <td style="color: #4ade80">${toClose}</td>
+      </tr>`;
+  });
+  document.getElementById('marketBody').innerHTML = html;
 }
 
+setInterval(update, 1000);
 update();
-setInterval(update, 60000);
 </script>
-
 </body>
 </html>
