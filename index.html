@@ -59,7 +59,7 @@
     }
     th, td {
       padding: 8px 10px;
-      text-align: left;
+      text-align: left;           /* All columns left-aligned by default */
       border-bottom: 1px solid #333;
     }
     th {
@@ -79,23 +79,21 @@
     .status-cell {
       min-width: 110px;
       white-space: nowrap;
-      text-align: center;
-      font-weight: bold;
+      /* No center alignment anymore */
     }
     .diff-cell {
       min-width: 90px;
-      text-align: center;
-      font-weight: bold;
-      color: #94a3b8;
+      white-space: nowrap;
+      /* No center alignment */
+    }
+    .open-close-cell {
+      min-width: 130px;
+      white-space: nowrap;
+      /* No center alignment */
     }
     .positive { color: #34d399; }
     .negative { color: #f87171; }
     .zero     { color: #cbd5e1; }
-    .open-close-cell {
-      min-width: 130px;           /* wider for your-time open/close */
-      white-space: nowrap;
-      text-align: center;
-    }
     .exchange-name a {
       color: var(--link);
       text-decoration: none;
@@ -236,7 +234,7 @@ function renderClock() {
   document.getElementById("utcTime").textContent = n.toUTCString().slice(17,25) + " UTC";
 }
 
-// Render single panel
+// Render markets table
 function renderMarkets() {
   const n = new Date();
   const utcH = n.getUTCHours() + n.getUTCMinutes()/60 + n.getUTCSeconds()/3600;
