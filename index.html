@@ -19,46 +19,46 @@
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 10px 8px;
+      padding: 12px 10px;
       min-height: 100vh;
     }
     .container {
-      max-width: 1400px; /* slimmer overall width */
+      max-width: 1400px;
       margin: 0 auto;
     }
     h1 {
       text-align: center;
       color: var(--accent);
-      margin: 8px 0 6px;
-      font-size: 1.7em;
+      margin: 10px 0 8px;
+      font-size: 1.8em;
     }
     .clock {
       text-align: center;
-      font-size: 1em;
-      margin-bottom: 10px;
+      font-size: 1.05em;
+      margin-bottom: 12px;
       color: #66ff99;
     }
     .panel {
       background: var(--card);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
     }
     .panel h2 {
       margin: 0;
       padding: 8px 12px;
       background: #0d1b40;
       color: #ffcc00;
-      font-size: 1.1em;
+      font-size: 1.15em;
       text-align: center;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.86em; /* slimmer font */
+      font-size: 0.9em;
     }
     th, td {
-      padding: 5px 7px; /* tighter padding */
+      padding: 6px 8px;
       text-align: left;
       border-bottom: 1px solid #333;
     }
@@ -70,18 +70,18 @@
     .closed  { background: var(--red)   !important; color: white; }
     .weekend { background: #424242 !important; }
     .always-open { background: #1b5e20 !important; color: white; }
-    .countdown { font-size: 0.84em; color: #a0d0ff; white-space: nowrap; }
+    .countdown { font-size: 0.86em; color: #a0d0ff; white-space: nowrap; }
     .local-time-cell {
       white-space: nowrap;
-      min-width: 120px;
+      min-width: 130px;
     }
     .duration-cell {
       min-width: 70px;
       white-space: nowrap;
-      text-align: left; /* ← left aligned as requested */
+      text-align: left;
     }
     .status-cell {
-      min-width: 90px;
+      min-width: 100px;
       white-space: nowrap;
     }
     .diff-cell {
@@ -89,7 +89,7 @@
       white-space: nowrap;
     }
     .open-close-cell {
-      min-width: 110px;
+      min-width: 120px;
       white-space: nowrap;
     }
     .exchange-name a {
@@ -107,7 +107,7 @@
       color: #80ffaa !important;
       font-weight: bold;
       text-align: center;
-      padding: 4px !important;
+      padding: 5px !important;
     }
   </style>
 </head>
@@ -140,7 +140,7 @@
 </div>
 
 <script>
-// DATA – ordered earliest → latest UTC open
+// DATA – ordered earliest → latest open (UTC)
 const ALL_EXCHANGES = [
   { name: "TSE", city: "Tokyo", utcOpen: 0, utcClose: 6, note: "09:00–15:00 JST", timeZone: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/" },
   { name: "SGX", city: "Singapore", utcOpen: 1, utcClose: 9, note: "09:00–17:00 SGT", timeZone: "Asia/Singapore", url: "https://www.sgx.com/" },
