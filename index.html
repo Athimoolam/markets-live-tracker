@@ -5,52 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>World Markets Live</title>
   <style>
-    :root { --bg: #0a0a1f; --card: #1c1c3a; --text: #ddd; --accent: #bb86fc; --green: #4ade80; --red: #f87171; --link: #66d9ff; }
+    :root { 
+      --bg: #0a0a1f; --card: #1c1c3a; --text: #ddd; --accent: #bb86fc; 
+      --green: #4ade80; --red: #f87171; --link: #66d9ff; 
+      --sub-gradient: linear-gradient(90deg, #162447 0%, #1f4068 100%);
+      --header-bg: #0d1b40;
+      --mkt-time: #ffcc00; 
+    }
+
+    /* PLEASANT LIGHT MODE REFINEMENT */
+    [data-theme="light"] {
+      --bg: #f1f5f9;       /* Soft Slate */
+      --card: #ffffff;     /* Clean White */
+      --text: #0f172a;     /* Deep Navy Text */
+      --accent: #7c3aed;   /* Muted Violet */
+      --green: #16a34a;    /* Forest Green */
+      --red: #dc2626;      /* Deep Red */
+      --link: #2563eb;     /* Professional Blue */
+      --sub-gradient: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 100%);
+      --header-bg: #1e293b; /* Dark Slate Header */
+      --mkt-time: #4338ca; /* Rich Indigo */
+    }
     
-    /* Overall Page Reduction & Zero Top Padding */
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0 10px 10px 10px; }
-    .container { max-width: 1300px; margin: 0 auto; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0 10px 10px 10px; transition: all 0.3s ease; }
+    .container { max-width: 1300px; margin: 0 auto; position: relative; }
     
-    /* App Heading - Tightened Margin */
+    .theme-toggle {
+      position: absolute; top: 10px; right: 0;
+      padding: 4px 12px; cursor: pointer; border-radius: 4px;
+      border: 1px solid var(--accent); background: var(--card); color: var(--text);
+      font-size: 0.8em; font-weight: bold; z-index: 100;
+    }
+
     h1.app-title {
-      text-align: center;
-      color: #fff;
-      font-size: 1.7em;
-      margin: 10px 0 2px 0; /* Minimal top/bottom margin */
-      letter-spacing: 1px;
+      text-align: center; color: #fff; font-size: 1.7em;
+      margin: 10px 0 2px 0; letter-spacing: 1px;
       text-shadow: 0 0 10px rgba(187, 134, 252, 0.4);
     }
     
+    [data-theme="light"] h1.app-title { color: #1e293b; text-shadow: none; }
+
     .clock { text-align: center; font-size: 0.95em; margin-bottom: 12px; color: #66ff99; font-family: monospace; opacity: 0.9; }
-    .panel { background: var(--card); border-radius: 8px; overflow-x: auto; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+    [data-theme="light"] .clock { color: #16a34a; font-weight: bold; }
+
+    .panel { background: var(--card); border-radius: 8px; overflow-x: auto; box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.05); }
     table { width: 100%; border-collapse: collapse; min-width: 1050px; }
     
-    /* Font 1.0em with Tight Padding */
     th, td { padding: 7px 12px; text-align: left; border-bottom: 1px solid #2d2d4d; white-space: nowrap; font-size: 1.0em; }
-    th { background: #0d1b40; color: #ffcc00; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; }
+    [data-theme="light"] td { border-bottom: 1px solid #e2e8f0; }
+
+    th { background: var(--header-bg); color: #ffcc00; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; z-index: 10; }
+    [data-theme="light"] th { color: #f1f5f9; }
     
     .subheader { 
-      background: linear-gradient(90deg, #162447 0%, #1f4068 100%) !important; 
+      background: var(--sub-gradient) !important; 
       color: #ffffff !important; 
-      font-size: 1.0em; 
-      text-align: center; 
-      font-weight: 700; 
-      letter-spacing: 1.5px;
-      height: 34px;
+      font-size: 1.0em; text-align: center; font-weight: 700; letter-spacing: 1.5px; height: 34px;
+    }
+    [data-theme="light"] .subheader { color: #1e293b !important; }
+
+    /* INCREASED TEXT SIZE & RICH INDIGO/GOLD COLOR */
+    .market-time-cell { 
+      font-family: monospace; 
+      font-weight: 800; 
+      font-size: 1.2em !important; 
+      color: var(--mkt-time); 
     }
 
     .status-open { color: var(--green); font-weight: bold; }
     .status-closed { color: var(--red); font-weight: bold; }
-    .status-weekend { color: #6b7280; font-style: italic; }
+    .status-weekend { color: #64748b; font-style: italic; }
+    
     .exchange-name a { color: var(--link); text-decoration: none; font-weight: bold; }
-    .city-label { color: #aaa; font-size: 0.8em; margin-left: 8px; font-weight: normal; }
+    .city-label { color: #64748b; font-size: 0.8em; margin-left: 8px; font-weight: normal; }
+    
     tr:hover { background: rgba(255,255,255,0.05); }
+    [data-theme="light"] tr:hover { background: rgba(0,0,0,0.02); }
+
     .cd-val { font-family: 'Courier New', monospace; font-weight: bold; }
+    [data-theme="light"] .cd-val { color: #1e293b; }
   </style>
 </head>
 <body>
 
 <div class="container">
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌓 Appearance</button>
   <h1 class="app-title">World Markets Live</h1>
   <div class="clock">YOUR TIME: <span id="localTime"></span> | UTC: <span id="utcTime"></span></div>
   
@@ -74,8 +113,16 @@
 </div>
 
 <script>
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const target = current === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', target);
+  localStorage.setItem('user_market_theme_pro', target);
+}
+const savedTheme = localStorage.getItem('user_market_theme_pro') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
 const EXCHANGES = [
-  // ASIA-PACIFIC
   { name: "ASX", city: "Sydney", open: "10:00", close: "16:00", tz: "Australia/Sydney", url: "https://www.asx.com.au/", group: "ASIA-PACIFIC" },
   { name: "TSE", city: "Tokyo", open: "09:00", close: "15:00", tz: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/", group: "ASIA-PACIFIC" },
   { name: "SGX", city: "Singapore", open: "09:00", close: "17:00", tz: "Asia/Singapore", url: "https://www.sgx.com/", group: "ASIA-PACIFIC" },
@@ -85,7 +132,6 @@ const EXCHANGES = [
   { name: "BSE", city: "Mumbai", open: "09:15", close: "15:30", tz: "Asia/Kolkata", url: "https://www.bseindia.com/", group: "ASIA-PACIFIC" },
   { name: "DFM", city: "Dubai", open: "10:00", close: "16:00", tz: "Asia/Dubai", url: "https://www.dfm.ae/", group: "ASIA-PACIFIC" },
   
-  // EMEA & NORDICS
   { name: "Nasdaq HEL", city: "Helsinki", open: "10:00", close: "18:30", tz: "Europe/Helsinki", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
   { name: "DAX", city: "Frankfurt", open: "08:00", close: "20:00", tz: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/", group: "EMEA & NORDICS" },
   { name: "Euronext PAR", city: "Paris", open: "09:00", close: "17:30", tz: "Europe/Paris", url: "https://www.euronext.com/", group: "EMEA & NORDICS" },
@@ -95,7 +141,6 @@ const EXCHANGES = [
   { name: "LSE", city: "London", open: "08:00", close: "16:30", tz: "Europe/London", url: "https://www.londonstockexchange.com/", group: "EMEA & NORDICS" },
   { name: "Nasdaq ICE", city: "Iceland", open: "09:30", close: "15:30", tz: "Atlantic/Reykjavik", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
   
-  // AMERICAS & CRYPTO
   { name: "NYSE/NASDAQ", city: "New York", open: "09:30", close: "16:00", tz: "America/New_York", url: "https://www.nyse.com/", group: "AMERICAS & CRYPTO" },
   { name: "Binance", city: "Global", isCrypto: true, url: "https://www.binance.com/", group: "AMERICAS & CRYPTO" },
   { name: "Coinbase", city: "Global", isCrypto: true, url: "https://www.coinbase.com/", group: "AMERICAS & CRYPTO" },
@@ -114,7 +159,7 @@ function calculateDuration(open, close) {
 
 function update() {
   const now = new Date();
-  document.getElementById('localTime').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+  document.getElementById('localTime').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit', hour12: false});
   document.getElementById('utcTime').textContent = now.toISOString().slice(11, 19);
 
   let html = '';
@@ -132,6 +177,9 @@ function update() {
     if (ex.isCrypto) {
       statusText = 'OPEN'; statusCls = 'status-open'; toClose = 'Non-stop';
     } else {
+      const options = { timeZone: ex.tz, weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+      marketTimeStr = now.toLocaleString("en-US", options);
+      
       const mDateString = now.toLocaleString("en-US", {timeZone: ex.tz});
       const mDate = new Date(mDateString);
       const day = mDate.getDay();
@@ -141,8 +189,6 @@ function update() {
       const openMin = oH * 60 + oM;
       const closeMin = cH * 60 + cM;
 
-      marketTimeStr = mDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
-      
       const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const localOffset = new Date(now.toLocaleString("en-US", {timeZone: localTz})).getTime();
       const marketOffset = new Date(mDateString).getTime();
@@ -165,13 +211,13 @@ function update() {
 
     html += `<tr>
         <td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a><span class="city-label">${ex.city}</span></td>
-        <td style="font-size: 0.95em;">${ex.open ? ex.open + ' – ' + ex.close : '24/7'}</td>
-        <td style="color: #a0d0ff;">${duration}</td>
-        <td style="font-family: monospace; font-weight: bold;">${marketTimeStr}</td>
-        <td>${diffStr}</td>
+        <td style="font-size: 0.95em; opacity: 0.9;">${ex.open ? ex.open + ' – ' + ex.close : '24/7'}</td>
+        <td style="color: var(--link); opacity: 0.8;">${duration}</td>
+        <td class="market-time-cell">${marketTimeStr}</td>
+        <td style="font-weight: 500;">${diffStr}</td>
         <td class="${statusCls}">${statusText}</td>
-        <td style="color: #ffcc00">${toOpen}</td>
-        <td style="color: #4ade80">${toClose}</td>
+        <td style="color: #b45309; font-weight: 600;">${toOpen}</td>
+        <td style="color: var(--green); font-weight: 600;">${toClose}</td>
       </tr>`;
   });
   document.getElementById('marketBody').innerHTML = html;
