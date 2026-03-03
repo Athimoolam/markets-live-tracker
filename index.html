@@ -1,219 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>World Markets Live - Compact Grid</title>
-  <style>
-    :root { 
-      --bg: #0a0a1f; --card: #1c1c3a; --text: #ddd; --accent: #bb86fc; 
-      --green: #4ade80; --red: #f87171; --link: #66d9ff; 
-      --sub-gradient: linear-gradient(90deg, #162447 0%, #1f4068 100%);
-      --header-bg: #0d1b40;
-      --mkt-time: #ffcc00; 
-      --v-line: rgba(255, 255, 255, 0.08);
-    }
-
-    [data-theme="light"] {
-      --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --accent: #7c3aed; 
-      --green: #16a34a; --red: #dc2626; --link: #2563eb;
-      --sub-gradient: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 100%);
-      --header-bg: #1e293b; --mkt-time: #4338ca;
-      --v-line: rgba(0, 0, 0, 0.1);
-    }
-    
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0 10px 10px 10px; transition: background 0.3s; }
-    .container { max-width: 1450px; margin: 0 auto; position: relative; }
-    
-    .top-controls { position: absolute; top: 10px; right: 0; display: flex; gap: 10px; align-items: center; }
-    
-    #marketSearch {
-      padding: 4px 10px; border-radius: 4px; border: 1px solid var(--accent);
-      background: var(--card); color: var(--text); font-size: 0.85em; outline: none;
-    }
-
-    .theme-toggle {
-      padding: 4px 12px; cursor: pointer; border-radius: 4px;
-      border: 1px solid var(--accent); background: var(--card); color: var(--text);
-      font-size: 0.8em; font-weight: bold;
-    }
-
-    h1.app-title { text-align: center; color: #fff; font-size: 1.7em; margin: 10px 0 2px 0; letter-spacing: 1px; }
-    [data-theme="light"] h1.app-title { color: #1e293b; }
-
-    .clock { text-align: center; font-size: 0.95em; margin-bottom: 12px; color: #66ff99; font-family: monospace; opacity: 0.9; }
-    [data-theme="light"] .clock { color: #16a34a; font-weight: bold; }
-
-    .panel { background: var(--card); border-radius: 8px; overflow-x: auto; box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.05); }
-    table { width: 100%; border-collapse: collapse; min-width: 1200px; }
-    
-    /* Restoration of the 7px Padding */
-    th, td { padding: 7px 12px; text-align: left; border-bottom: 1px solid #2d2d4d; white-space: nowrap; font-size: 1.0em; }
-    [data-theme="light"] td { border-bottom: 1px solid #e2e8f0; }
-
-    /* Vertical Separators */
-    td + td, th + th { border-left: 1px solid var(--v-line); }
-
-    th { background: var(--header-bg); color: #ffcc00; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; z-index: 10; }
-    [data-theme="light"] th { color: #f1f5f9; }
-    
-    .subheader { background: var(--sub-gradient) !important; color: #ffffff !important; font-size: 1.0em; text-align: center; font-weight: 700; height: 34px; }
-    .subheader td { border-left: none !important; }
-    [data-theme="light"] .subheader { color: #1e293b !important; }
-
-    .market-time-cell { font-family: monospace; font-weight: 800; font-size: 1.2em !important; color: var(--mkt-time); }
-    .status-open { color: var(--green); font-weight: bold; }
-    .status-closed { color: var(--red); font-weight: bold; }
-    
-    .exchange-name a { color: var(--link); text-decoration: none; font-weight: bold; }
-    .city-label { color: #64748b; font-size: 0.8em; margin-left: 8px; }
-    
-    .urgent { color: var(--red) !important; font-weight: 900 !important; animation: blink 1s infinite; }
-    @keyframes blink { 50% { opacity: 0.5; } }
-
-    .cd-val { font-family: 'Courier New', monospace; font-weight: bold; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Grid-Tracer V4 | Global Market Monitor</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-  <div class="top-controls">
-    <input type="text" id="marketSearch" placeholder="Search Markets..." onkeyup="update()">
-    <button class="theme-toggle" onclick="toggleTheme()">🌓 Appearance</button>
-  </div>
-  
-  <h1 class="app-title">World Markets Live</h1>
-  <div class="clock">YOUR TIME: <span id="localTime"></span> | UTC: <span id="utcTime"></span></div>
-  
-  <div class="panel">
-    <table>
-      <thead>
-        <tr>
-          <th>Exchange</th>
-          <th>Exch. Hours (Local)</th>
-          <th>Session</th>
-          <th>Market Local Time</th>
-          <th>Your Time (Translated)</th>
-          <th>Status</th>
-          <th>To Open</th>
-          <th>To Close</th>
-        </tr>
-      </thead>
-      <tbody id="marketBody"></tbody>
-    </table>
-  </div>
+<div class="dashboard-wrapper">
+    
+    <aside class="sidebar">
+        <div class="sidebar-inner">
+            <div class="widget-title">Market Analysis</div>
+            </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="table-header-row">
+            <div class="header-left">
+                <input type="text" id="marketSearch" placeholder="🔍 Filter exchanges..." onkeyup="updateTable()">
+            </div>
+            
+            <div class="header-center">
+                <h1>World Markets Live</h1>
+                <div id="mainClock"></div>
+            </div>
+
+            <div class="header-right">
+                <button class="theme-btn" onclick="toggleTheme()">🌓 APPEARANCE</button>
+            </div>
+        </header>
+
+        <div class="panel">
+            <table id="marketTable">
+                <thead>
+                    <tr>
+                        <th class="col-exch">Exchange</th>
+                        <th class="col-hours">Hours</th>
+                        <th class="col-sess">Session</th>
+                        <th class="col-mtime">Market Time</th>
+                        <th class="col-ytime">Your Time</th>
+                        <th class="col-status">Status</th>
+                        <th class="col-open">To Open</th>
+                        <th class="col-close">To Close</th>
+                    </tr>
+                </thead>
+                <tbody id="marketBody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <aside class="sidebar">
+        <div class="sidebar-inner">
+            <div class="widget-title">Economic Calendar</div>
+            </div>
+    </aside>
+
 </div>
 
-<script>
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const target = current === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', target);
-  localStorage.setItem('user_market_theme_grid', target);
-}
-document.documentElement.setAttribute('data-theme', localStorage.getItem('user_market_theme_grid') || 'dark');
-
-const EXCHANGES = [
-  { name: "ASX", city: "Sydney", open: "10:00", close: "16:00", tz: "Australia/Sydney", url: "https://www.asx.com.au/", group: "ASIA-PACIFIC" },
-  { name: "TSE", city: "Tokyo", open: "09:00", close: "15:00", tz: "Asia/Tokyo", url: "https://www.jpx.co.jp/english/", group: "ASIA-PACIFIC" },
-  { name: "SGX", city: "Singapore", open: "09:00", close: "17:00", tz: "Asia/Singapore", url: "https://www.sgx.com/", group: "ASIA-PACIFIC" },
-  { name: "SSE", city: "Shanghai", open: "09:30", close: "15:00", tz: "Asia/Shanghai", url: "http://english.sse.com.cn/", group: "ASIA-PACIFIC" },
-  { name: "HKEX", city: "Hong Kong", open: "09:30", close: "16:00", tz: "Asia/Hong_Kong", url: "https://www.hkex.com.hk/", group: "ASIA-PACIFIC" },
-  { name: "NSE", city: "Delhi", open: "09:15", close: "15:30", tz: "Asia/Kolkata", url: "https://www.nseindia.com/", group: "ASIA-PACIFIC" },
-  { name: "BSE", city: "Mumbai", open: "09:15", close: "15:30", tz: "Asia/Kolkata", url: "https://www.bseindia.com/", group: "ASIA-PACIFIC" },
-  { name: "DFM", city: "Dubai", open: "10:00", close: "16:00", tz: "Asia/Dubai", url: "https://www.dfm.ae/", group: "ASIA-PACIFIC" },
-  { name: "Nasdaq HEL", city: "Helsinki", open: "10:00", close: "18:30", tz: "Europe/Helsinki", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
-  { name: "DAX", city: "Frankfurt", open: "08:00", close: "20:00", tz: "Europe/Berlin", url: "https://www.boerse-frankfurt.de/", group: "EMEA & NORDICS" },
-  { name: "Euronext PAR", city: "Paris", open: "09:00", close: "17:30", tz: "Europe/Paris", url: "https://www.euronext.com/", group: "EMEA & NORDICS" },
-  { name: "Nasdaq STO", city: "Stockholm", open: "09:00", close: "17:30", tz: "Europe/Stockholm", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
-  { name: "Nasdaq CPH", city: "Copenhagen", open: "09:00", close: "17:00", tz: "Europe/Copenhagen", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
-  { name: "Oslo Børs", city: "Oslo", open: "09:00", close: "16:30", tz: "Europe/Oslo", url: "https://www.euronext.com/en/markets/oslo", group: "EMEA & NORDICS" },
-  { name: "LSE", city: "London", open: "08:00", close: "16:30", tz: "Europe/London", url: "https://www.londonstockexchange.com/", group: "EMEA & NORDICS" },
-  { name: "Nasdaq ICE", city: "Iceland", open: "09:30", close: "15:30", tz: "Atlantic/Reykjavik", url: "https://www.nasdaqomxnordic.com/", group: "EMEA & NORDICS" },
-  { name: "NYSE/NASDAQ", city: "New York", open: "09:30", close: "16:00", tz: "America/New_York", url: "https://www.nyse.com/", group: "AMERICAS & CRYPTO" },
-  { name: "Binance", city: "Global", isCrypto: true, url: "https://www.binance.com/", group: "AMERICAS & CRYPTO" },
-  { name: "Coinbase", city: "Global", isCrypto: true, url: "https://www.coinbase.com/", group: "AMERICAS & CRYPTO" },
-  { name: "Kraken", city: "Global", isCrypto: true, url: "https://www.kraken.com/", group: "AMERICAS & CRYPTO" },
-  { name: "Bybit", city: "Global", isCrypto: true, url: "https://www.bybit.com/", group: "AMERICAS & CRYPTO" }
-];
-
-function getTranslatedHours(openStr, closeStr, targetTz) {
-  if (!openStr) return "24/7";
-  const now = new Date();
-  const marketNow = new Date(now.toLocaleString("en-US", {timeZone: targetTz}));
-  const [oH, oM] = openStr.split(':').map(Number);
-  const [cH, cM] = closeStr.split(':').map(Number);
-  const marketOpen = new Date(marketNow); marketOpen.setHours(oH, oM, 0, 0);
-  const marketClose = new Date(marketNow); marketClose.setHours(cH, cM, 0, 0);
-  const formatter = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
-  const diff = now.getTime() - marketNow.getTime();
-  const localOpen = new Date(marketOpen.getTime() + diff);
-  const localClose = new Date(marketClose.getTime() + diff);
-  return `${formatter.format(localOpen)} – ${formatter.format(localClose)}`;
-}
-
-function update() {
-  const now = new Date();
-  const searchVal = document.getElementById('marketSearch').value.toLowerCase();
-  document.getElementById('localTime').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit', hour12: false});
-  document.getElementById('utcTime').textContent = now.toISOString().slice(11, 19);
-
-  let html = '', lastGroup = '';
-
-  EXCHANGES.forEach(ex => {
-    if (searchVal && !ex.name.toLowerCase().includes(searchVal) && !ex.city.toLowerCase().includes(searchVal)) return;
-
-    if (ex.group !== lastGroup) {
-      html += `<tr class="subheader"><td colspan="8">${ex.group}</td></tr>`;
-      lastGroup = ex.group;
-    }
-
-    let statusText = '', statusCls = '', toOpen = '—', toClose = '—', mTimeStr = 'Global';
-    let translatedHours = getTranslatedHours(ex.open, ex.close, ex.tz);
-
-    if (ex.isCrypto) {
-      statusText = 'OPEN'; statusCls = 'status-open'; toClose = 'Non-stop';
-    } else {
-      const options = { timeZone: ex.tz, weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-      mTimeStr = now.toLocaleString("en-US", options);
-      const mDate = new Date(now.toLocaleString("en-US", {timeZone: ex.tz}));
-      const day = mDate.getDay();
-      const currentMin = mDate.getHours() * 60 + mDate.getMinutes();
-      const [oH, oM] = ex.open.split(':').map(Number);
-      const [cH, cM] = ex.close.split(':').map(Number);
-      const openMin = oH * 60 + oM;
-      const closeMin = cH * 60 + cM;
-
-      if (day === 0 || day === 6) {
-        statusText = 'WEEKEND'; statusCls = 'status-closed';
-      } else if (currentMin >= openMin && currentMin < closeMin) {
-        statusText = 'OPEN'; statusCls = 'status-open';
-        let rem = closeMin - currentMin;
-        toClose = `<span class="cd-val ${rem <= 15 ? 'urgent' : ''}">${Math.floor(rem/60)}h ${rem%60}m</span>`;
-      } else {
-        statusText = 'CLOSED'; statusCls = 'status-closed';
-        let rem = openMin - currentMin;
-        if (rem < 0) rem += 1440;
-        toOpen = `<span class="cd-val ${rem <= 15 ? 'urgent' : ''}">${Math.floor(rem/60)}h ${rem%60}m</span>`;
-      }
-    }
-
-    html += `<tr>
-        <td class="exchange-name"><a href="${ex.url}" target="_blank">${ex.name}</a><span class="city-label">${ex.city}</span></td>
-        <td style="font-size: 0.9em; opacity: 0.7;">${ex.open ? ex.open + '–' + ex.close : '24/7'}</td>
-        <td style="color: var(--link); opacity: 0.8;">${ex.open ? '6h 0m' : '24h'}</td>
-        <td class="market-time-cell">${mTimeStr}</td>
-        <td style="color: #a0d0ff; font-weight: bold;">${translatedHours}</td>
-        <td class="${statusCls}">${statusText}</td>
-        <td style="color: #ffcc00">${toOpen}</td>
-        <td style="color: var(--green)">${toClose}</td>
-      </tr>`;
-  });
-  document.getElementById('marketBody').innerHTML = html;
-}
-
-setInterval(update, 1000);
-update();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
