@@ -109,6 +109,12 @@ function updateTable() {
                 sessionStr = sessionDisplay; 
             }
         }
+        else {
+            statusText = '24/7 OPEN';
+            statusCls = 'always-open';
+            toOpen = '—';
+            toClose = '—';
+        }
 
         html += `<tr>
             <td class="col-exch">
