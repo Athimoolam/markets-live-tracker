@@ -80,7 +80,7 @@ function updateTable() {
             const diffHours = (exchangeDate - now) / 3600000;
             const hours = Math.floor(diffHours);
             const minutes = Math.round((diffHours - hours) * 60);
-            const sign = diffHours >= 0 ? '+' : '-';
+            const sign = diffHours >= 0 ? '+' : '';
             let diffStr = `${sign}${hours}h`;
             if (minutes !== 0) diffStr += `${minutes}m`;
 
@@ -115,8 +115,11 @@ function updateTable() {
             }
         }
         else {
-            statusText = '24/7 OPEN';
+            statusText = 'OPEN';
             statusCls = 'always-open';
+            translatedHours = '24/7';
+            mTimeStr = 'Global';
+            sessionStr = '24h';
             toOpen = '—';
             toClose = '—';
         }
@@ -146,3 +149,4 @@ function toggleTheme() {
 setInterval(updateTable, 1000);
 
 updateTable();
+
