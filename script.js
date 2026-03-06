@@ -4,27 +4,27 @@
  */
 
 const EXCHANGES = [
-    { name: "ASX", city: "Sydney", open: "10:00", close: "16:00", tz: "Australia/Sydney", group: "ASIA-PACIFIC" },
-    { name: "TSE", city: "Tokyo", open: "09:00", close: "15:00", tz: "Asia/Tokyo", group: "ASIA-PACIFIC" },
-    { name: "SGX", city: "Singapore", open: "09:00", close: "17:00", tz: "Asia/Singapore", group: "ASIA-PACIFIC" },
-    { name: "SSE", city: "Shanghai", open: "09:30", close: "15:00", tz: "Asia/Shanghai", group: "ASIA-PACIFIC" },
-    { name: "HKEX", city: "Hong Kong", open: "09:30", close: "16:00", tz: "Asia/Hong_Kong", group: "ASIA-PACIFIC" },
-    { name: "NSE", city: "Delhi", open: "09:15", close: "15:30", tz: "Asia/Kolkata", group: "ASIA-PACIFIC" },
-    { name: "BSE", city: "Mumbai", open: "09:15", close: "15:30", tz: "Asia/Kolkata", group: "ASIA-PACIFIC" },
-    { name: "DFM", city: "Dubai", open: "10:00", close: "16:00", tz: "Asia/Dubai", group: "ASIA-PACIFIC" },
-    { name: "Nasdaq HEL", city: "Helsinki", open: "10:00", close: "18:30", tz: "Europe/Helsinki", group: "EMEA & NORDICS" },
-    { name: "DAX", city: "Frankfurt", open: "08:00", close: "20:00", tz: "Europe/Berlin", group: "EMEA & NORDICS" },
-    { name: "Euronext PAR", city: "Paris", open: "09:00", close: "17:30", tz: "Europe/Paris", group: "EMEA & NORDICS" },
-    { name: "Nasdaq STO", city: "Stockholm", open: "09:00", close: "17:30", tz: "Europe/Stockholm", group: "EMEA & NORDICS" },
-    { name: "Nasdaq CPH", city: "Copenhagen", open: "09:00", close: "17:00", tz: "Europe/Copenhagen", group: "EMEA & NORDICS" },
-    { name: "Oslo Børs", city: "Oslo", open: "09:00", close: "16:30", tz: "Europe/Oslo", group: "EMEA & NORDICS" },
-    { name: "LSE", city: "London", open: "08:00", close: "16:30", tz: "Europe/London", group: "EMEA & NORDICS" },
-    { name: "Nasdaq ICE", city: "Iceland", open: "09:30", close: "15:30", tz: "Atlantic/Reykjavik", group: "EMEA & NORDICS" },
-    { name: "NYSE/NASDAQ", city: "New York", open: "09:30", close: "16:00", tz: "America/New_York", group: "AMERICAS & CRYPTO" },
-    { name: "Binance", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO" },
-    { name: "Coinbase", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO" },
-    { name: "Kraken", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO" },
-    { name: "Bybit", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO" }
+    { name: "ASX", city: "Sydney", open: "10:00", close: "16:00", tz: "Australia/Sydney", group: "ASIA-PACIFIC", url: "https://www.asx.com.au/" },
+    { name: "TSE", city: "Tokyo", open: "09:00", close: "15:00", tz: "Asia/Tokyo", group: "ASIA-PACIFIC", url: "https://www.jpx.co.jp/english/" },
+    { name: "SGX", city: "Singapore", open: "09:00", close: "17:00", tz: "Asia/Singapore", group: "ASIA-PACIFIC", url: "https://www.sgx.com/" },
+    { name: "SSE", city: "Shanghai", open: "09:30", close: "15:00", tz: "Asia/Shanghai", group: "ASIA-PACIFIC", url: "http://english.sse.com.cn/" },
+    { name: "HKEX", city: "Hong Kong", open: "09:30", close: "16:00", tz: "Asia/Hong_Kong", group: "ASIA-PACIFIC", url: "https://www.hkex.com.hk/" },
+    { name: "NSE", city: "Delhi", open: "09:15", close: "15:30", tz: "Asia/Kolkata", group: "ASIA-PACIFIC", url: "https://www.nseindia.com/" },
+    { name: "BSE", city: "Mumbai", open: "09:15", close: "15:30", tz: "Asia/Kolkata", group: "ASIA-PACIFIC", url: "https://www.bseindia.com/" },
+    { name: "DFM", city: "Dubai", open: "10:00", close: "16:00", tz: "Asia/Dubai", group: "ASIA-PACIFIC", url: "https://www.dfm.ae/" },
+    { name: "Nasdaq HEL", city: "Helsinki", open: "10:00", close: "18:30", tz: "Europe/Helsinki", group: "EMEA & NORDICS", url: "https://www.nasdaqomxnordic.com/" },
+    { name: "DAX", city: "Frankfurt", open: "08:00", close: "20:00", tz: "Europe/Berlin", group: "EMEA & NORDICS", url: "https://www.boerse-frankfurt.de/" },
+    { name: "Euronext PAR", city: "Paris", open: "09:00", close: "17:30", tz: "Europe/Paris", group: "EMEA & NORDICS", url: "https://www.euronext.com/en/markets/paris" },
+    { name: "Nasdaq STO", city: "Stockholm", open: "09:00", close: "17:30", tz: "Europe/Stockholm", group: "EMEA & NORDICS", url: "https://www.nasdaqomxnordic.com/" },
+    { name: "Nasdaq CPH", city: "Copenhagen", open: "09:00", close: "17:00", tz: "Europe/Copenhagen", group: "EMEA & NORDICS", url: "https://www.nasdaqomxnordic.com/" },
+    { name: "Oslo Børs", city: "Oslo", open: "09:00", close: "16:30", tz: "Europe/Oslo", group: "EMEA & NORDICS", url: "https://www.euronext.com/en/markets/oslo" },
+    { name: "LSE", city: "London", open: "08:00", close: "16:30", tz: "Europe/London", group: "EMEA & NORDICS", url: "https://www.londonstockexchange.com/" },
+    { name: "Nasdaq ICE", city: "Iceland", open: "09:30", close: "15:30", tz: "Atlantic/Reykjavik", group: "EMEA & NORDICS", url: "https://www.nasdaqomxnordic.com/" },
+    { name: "NYSE/NASDAQ", city: "New York", open: "09:30", close: "16:00", tz: "America/New_York", group: "AMERICAS & CRYPTO", url: "https://www.nyse.com/" },
+    { name: "Binance", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO", url: "https://www.binance.com/en/trade" },
+    { name: "Coinbase", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO", url: "https://www.coinbase.com/trade" },
+    { name: "Kraken", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO", url: "https://www.kraken.com/" },
+    { name: "Bybit", city: "Global", isCrypto: true, group: "AMERICAS & CRYPTO", url: "https://www.bybit.com/" }
 ];
 
 /**
@@ -111,7 +111,10 @@ function updateTable() {
         }
 
         html += `<tr>
-            <td class="col-exch"><b>${ex.name}</b><span class="city-label">${ex.city}</span></td>
+            <td class="col-exch">
+                ${ex.url ? `<a href="${ex.url}" target="_blank" rel="noopener noreferrer"><b>${ex.name}</b></a>` : `<b>${ex.name}</b>`}
+                <span class="city-label">${ex.city}</span>
+            </td>
             <td class="col-hours" style="font-size:0.85em; opacity:0.6">${ex.open ? ex.open+'–'+ex.close : '24h'}</td>
             <td class="col-sess" style="color:var(--link); font-weight:bold;">${sessionStr}</td>
             <td class="col-mtime market-time-cell">${mTimeStr}</td>
