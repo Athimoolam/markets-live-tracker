@@ -75,9 +75,12 @@ function updateTable() {
         if (!ex.isCrypto) {
             const timeOptions = { timeZone: ex.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             
-            const exchangeDate = new Date(now.toLocaleString("en-US", {timeZone: ex.tz}));
-            const diffHours = Math.round((exchangeDate - now) / 3600000);
-            const diffStr = diffHours >= 0 ? `+${diffHours}h` : `${diffHours}h`;
+            const diffHours = (exchangeDate - now) / 3600000;
+            const hours = Math.floor(diffHours);
+            const minutes = Math.round((diffHours - hours) * 60);
+            const sign = diffHours >= 0 ? '+' : '-';
+            let diffStr = `${sign}${hours}h`;
+            if (minutes !== 0) diffStr += `${minutes}m`;
 
             // Time only + High Visibility Offset for table space
             mTimeStr = `${now.toLocaleString("en-US", timeOptions)} <span class="offset-tag">${diffStr}</span>`;
