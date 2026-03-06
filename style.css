@@ -182,3 +182,22 @@ th {
 /* --- UI ELEMENTS --- */
 #marketSearch { padding: 6px 10px; border-radius: 4px; border: 1px solid var(--accent); background: var(--card); color: var(--text); width: 150px; font-size: 0.85em; }
 .theme-btn { cursor:pointer; background:var(--card); color:var(--text); border:1px solid var(--accent); border-radius:4px; padding: 6px 12px; font-size: 0.75em; font-weight: bold; }
+
+/* Make exchange name links use your accent/link color */
+.col-exch a {
+    color: var(--link) !important;          /* #66d9ff */
+    text-decoration: none !important;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.col-exch a:hover,
+.col-exch a:focus {
+    color: #99e6ff !important;              /* lighter hover variant, or use var(--accent) */
+    text-decoration: underline !important;
+}
+
+/* Ensure the <b> inside link inherits properly */
+.col-exch a b {
+    color: inherit !important;
+    font-weight: bold;
+}
