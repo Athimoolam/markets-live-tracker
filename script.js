@@ -68,14 +68,15 @@ function updateTable() {
             html += `<tr class="subheader"><td colspan="8">${ex.group}</td></tr>`; 
             lastGroup = ex.group; 
         }
-        
+        // Move this line UP here (outside the if)
+        const exchangeDate = new Date(now.toLocaleString("en-US", { timeZone: ex.tz }));
+
         let statusText = 'CLOSED', statusCls = 'status-closed', toOpen = '—', toClose = '—', mTimeStr = 'Global', sessionStr = '24h';
         let translatedHours = getTranslatedHours(ex.open, ex.close, ex.tz);
 
         if (!ex.isCrypto) {
             const timeOptions = { timeZone: ex.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            
-            const exchangeDate = new Date(now.toLocaleString("en-US", {timeZone: ex.tz}));
+           
             const diffHours = (exchangeDate - now) / 3600000;
             const hours = Math.floor(diffHours);
             const minutes = Math.round((diffHours - hours) * 60);
