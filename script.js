@@ -75,6 +75,7 @@ function updateTable() {
         if (!ex.isCrypto) {
             const timeOptions = { timeZone: ex.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             
+            const exchangeDate = new Date(now.toLocaleString("en-US", {timeZone: ex.tz}));
             const diffHours = (exchangeDate - now) / 3600000;
             const hours = Math.floor(diffHours);
             const minutes = Math.round((diffHours - hours) * 60);
@@ -142,4 +143,5 @@ function toggleTheme() {
 }
 
 setInterval(updateTable, 1000);
+
 updateTable();
