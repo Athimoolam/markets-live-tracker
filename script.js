@@ -78,11 +78,13 @@ function updateTable() {
             const timeOptions = { timeZone: ex.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
            
             const diffHours = (exchangeDate - now) / 3600000;
-            const hours = Math.floor(diffHours);
-            const minutes = Math.round((diffHours - hours) * 60);
-            const sign = diffHours >= 0 ? '+' : '';
-            let diffStr = `${sign}${hours}h`;
-            if (minutes !== 0) diffStr += `${minutes}m`;
+            const totalMin = Math.round(diffHours * 60);
+            const sign = totalMin >= 0 ? '+' : '';
+            const absMin = Math.abs(totalMin);
+            const h = Math.floor(absMin / 60);
+            const m = absMin % 60;
+            let diffStr = `${sign}${h}h`;
+            if (m > 0) diffStr += `${m}m`;
 
             // Time only + High Visibility Offset for table space
             mTimeStr = `${now.toLocaleString("en-US", timeOptions)} <span class="offset-tag">${diffStr}</span>`;
@@ -149,4 +151,5 @@ function toggleTheme() {
 setInterval(updateTable, 1000);
 
 updateTable();
+
 
