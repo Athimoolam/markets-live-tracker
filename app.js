@@ -12,7 +12,7 @@ async function init() {
     const header = await loadComponent('header', 'header-anchor');
     const table = await loadComponent('market-table', 'table-anchor');
 
-    // Manually setting Sidebar Content as in your version
+    // Restore original Sidebar Labels
     document.getElementById('left-sidebar-anchor').innerHTML = `
         <div class="sidebar-inner"><div class="widget-title">Market Analysis</div></div>`;
     document.getElementById('right-sidebar-anchor').innerHTML = `
@@ -22,8 +22,17 @@ async function init() {
         header.run();
         table.run();
     }
+
     setInterval(tick, 1000);
     tick();
-    document.getElementById('marketSearch').addEventListener('keyup', () => table.run());
+
+    // Re-attach Search Listener
+    const searchInput = document.getElementById('marketSearch');
+    if (searchInput) searchInput.addEventListener('keyup', () => table.run());
 }
 init();
+
+window.toggleTheme = () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+};
