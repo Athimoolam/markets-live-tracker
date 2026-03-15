@@ -24,15 +24,12 @@ export function run() {
     let html = '';
 
     EXCHANGES.forEach(ex => {
-        // Search Logic
         if (!ex.name.toLowerCase().includes(filter) && !ex.city.toLowerCase().includes(filter)) return;
 
-        // Time Calculations
         const mTime = new Date(now.toLocaleString("en-US", { timeZone: ex.tz }));
         const diffHours = Math.round((mTime - now) / 3600000);
         const diffStr = diffHours >= 0 ? `+${diffHours}` : `${diffHours}`;
 
-        // Session Status Logic
         const curMins = mTime.getHours() * 60 + mTime.getMinutes();
         const [oH, oM] = ex.open.split(':').map(Number);
         const [cH, cM] = ex.close.split(':').map(Number);
@@ -42,7 +39,6 @@ export function run() {
         const isWeekend = mTime.getDay() === 0 || mTime.getDay() === 6;
         const isOpen = !isWeekend && curMins >= openTotal && curMins < closeTotal;
 
-        // To Open / To Close logic
         let toOpen = "--", toClose = "--";
         if (!isOpen && !isWeekend) {
             let d = openTotal - curMins;
@@ -57,10 +53,10 @@ export function run() {
             <tr>
                 <td class="col-exch">
                     <a href="${ex.url}" target="_blank" style="color:#fff; text-decoration:none"><strong>${ex.name}</strong></a><br>
-                    <small style="opacity:0.6">${ex.city}</small>
+                    <span style="font-size:0.8em; opacity:0.6">${ex.city}</span>
                 </td>
-                <td class="col-hours">${ex.open} - ${ex.close}</td>
-                <td class="col-sess">${isWeekend ? 'Weekend' : (isOpen ? 'Main' : 'Closed')}</td>
+                <td class="col-hours">${ex.open}-${ex.close}</td>
+                <td class="col-sess">${isWeekend ? 'Wknd' : (isOpen ? 'Main' : 'Clsd')}</td>
                 <td class="col-mtime">
                     ${mTime.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', second:'2-digit'})}
                     <span class="offset-tag">${diffStr}h</span>

@@ -16,18 +16,19 @@ table {
 th {
     background: rgba(255, 255, 255, 0.03);
     color: var(--accent);
-    padding: 12px;
+    padding: 6px 12px;
     text-align: left;
-    font-size: 0.8em;
+    font-size: 0.75em;
     text-transform: uppercase;
     border-bottom: 1px solid var(--v-line);
 }
 
 td {
-    padding: 12px;
+    padding: 4px 12px; /* Tightest vertical padding */
     border-bottom: 1px solid var(--v-line);
-    font-size: 0.9em;
+    font-size: 0.85em;
     vertical-align: middle;
+    line-height: 1.1;
 }
 
 /* Frozen Column Widths */
@@ -37,33 +38,21 @@ td {
 .col-mtime { width: 180px; }
 .col-ytime { width: 100px; }
 .col-status { width: 85px; }
-.col-open, .col-close { 
-    width: 90px; 
-    color: var(--accent); 
-    font-weight: 500; 
-}
+.col-open, .col-close { width: 90px; color: var(--accent); font-weight: 500; }
 
 .offset-tag {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: var(--accent);
     font-weight: 600;
-    margin-left: 8px;
+    margin-left: 5px;
 }
 
-.status-open {
-    color: var(--green);
-    font-weight: bold;
-}
-
-.status-closed {
-    color: #ff5555;
-    opacity: 0.7;
-}
+.status-open { color: var(--green); font-weight: bold; }
+.status-closed { color: #ff5555; opacity: 0.7; }
 
 .sidebar-inner {
     background: var(--card);
     border: 1px solid var(--v-line);
     border-radius: 6px;
     height: 100%;
-    min-height: 400px;
 }

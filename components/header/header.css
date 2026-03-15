@@ -3,29 +3,22 @@
     align-items: center;
     width: 100%;
     max-width: 950px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     justify-content: space-between;
 }
 
-.header-center {
-    flex: 1;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .header-center h1 {
-    font-size: 1.7em;
+    font-size: 1.6em;
     margin: 0;
     font-weight: 700;
+    line-height: 1.1;
 }
 
 #mainClock {
     font-family: monospace;
     color: var(--green);
-    font-size: 1.2em;
-    margin-top: 5px;
+    font-size: 1.1em;
+    margin-top: 2px;
     font-weight: 600;
 }
 
@@ -33,17 +26,18 @@
     background: var(--card);
     border: 1px solid var(--v-line);
     color: white;
-    padding: 8px 12px;
+    padding: 5px 10px;
     border-radius: 4px;
-    width: 220px;
+    width: 200px;
+    font-size: 0.85em;
 }
 
 .theme-btn {
     background: var(--card);
     color: var(--text);
     border: 1px solid var(--v-line);
-    padding: 8px 15px;
+    padding: 5px 12px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.8em;
+    font-size: 0.75em;
 }
