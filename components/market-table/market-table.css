@@ -1,45 +1,86 @@
-.panel {
-    background: var(--card);
-    border-radius: 6px;
-    width: 100%;
-    max-width: 950px;
+/**
+ * COMPONENT: Market Table
+ * Focus: High-density data display with reduced font sizes
+ */
+
+.panel { 
+    background: var(--card); 
+    border-radius: 6px; 
+    overflow: hidden; 
     border: 1px solid var(--v-line);
-    overflow: hidden;
+    width: 100%; 
+    max-width: var(--table-max-w);
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    table-layout: fixed; 
 }
 
-th {
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--accent);
-    padding: 12px;
+/* Table Headers - Reduced to 0.65em */
+th { 
+    background: var(--header-bg); 
+    color: #ffcc00; 
+    font-size: 0.65em; 
+    text-transform: uppercase; 
+    padding: 6px;
     text-align: left;
-    font-size: 0.8em;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--v-line);
 }
 
-td {
-    padding: 10px 12px; /* Balanced padding for original height */
-    border-bottom: 1px solid var(--v-line);
-    font-size: 0.9em;
-    vertical-align: middle;
+/* Main Row Data - Reduced to 0.75em and Tight Padding */
+td { 
+    padding: 4px 6px; 
+    text-align: left; 
+    border-bottom: 1px solid #2d2d4d; 
+    white-space: nowrap; 
+    font-size: 0.75em; 
 }
 
-.col-exch { width: 140px; }
-.col-hours { width: 110px; }
-.col-mtime { width: 180px; }
+td + td, th + th { border-left: 1px solid var(--v-line); }
 
-.offset-tag {
-    font-size: 1.2em; /* Restored size */
-    color: var(--accent);
-    font-weight: 600;
-    margin-left: 8px;
+/* Exact Column Widths from your Logic */
+.col-exch { width: 160px; } 
+.col-hours { width: 90px; } 
+.col-sess { width: 85px; } 
+.col-mtime { width: 145px; } 
+.col-ytime { width: 130px; } 
+.col-status { width: 80px; } 
+.col-open { width: 85px; }
+.col-close { width: 85px; }
+
+/* Yellow Market Time - Reduced to 0.9em */
+.market-time-cell { 
+    font-family: monospace; 
+    font-weight: 700; 
+    font-size: 0.9em !important; 
+    color: var(--mkt-time); 
 }
 
+/* Purple Offset Tag (+13h, etc) */
+.offset-tag { 
+    font-size: 1.1em; 
+    color: var(--accent); 
+    margin-left: 5px; 
+    font-weight: 600; 
+}
+
+.city-label { color: #64748b; font-size: 0.7em; margin-left: 5px; }
+
+/* Status Colors */
 .status-open { color: var(--green); font-weight: bold; }
-.status-closed { color: #ff5555; opacity: 0.8; }
+.status-closed { color: var(--red); font-weight: bold; }
+.always-open { color: var(--green); font-weight: bold; }
+
+/* Group Headers (ASIA-PACIFIC, etc) */
+.subheader { 
+    background: var(--sub-gradient) !important; 
+    color: #fff !important; 
+    font-weight: 700; 
+    text-align: center; 
+    font-size: 0.75em; 
+    height: 26px; 
+}
+
+.col-exch a { color: var(--link) !important; text-decoration: none; }
+.col-exch a:hover { text-decoration: underline; }
