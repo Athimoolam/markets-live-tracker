@@ -1,15 +1,18 @@
 .table-header-row {
-    display: flex;
+    display: flex; 
+    justify-content: space-between; 
     align-items: center;
-    width: 100%;
-    max-width: 950px;
-    margin-bottom: 15px;
-    justify-content: space-between;
+    width: 100%; 
+    max-width: var(--table-max-w); 
+    padding: 10px 0;
 }
 
 .header-center {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
     text-align: center;
+    flex: 1;
 }
 
 .header-center h1 {
@@ -19,19 +22,10 @@
 }
 
 #mainClock {
-    font-family: monospace;
-    color: var(--green);
-    font-size: 1.2em; /* Restored to original size */
+    font-family: monospace; 
+    color: var(--green); 
+    font-size: 1.2em; 
     margin-top: 5px;
-    font-weight: 600;
-    display: block; /* Ensures centering */
-}
-
-.header-left input {
-    background: var(--card);
-    border: 1px solid var(--v-line);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    width: 220px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
 }

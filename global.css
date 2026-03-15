@@ -1,48 +1,66 @@
-:root {
-    --bg: #0a0a1f;
-    --card: #1c1c3a;
-    --text: #ddd;
-    --accent: #bb86fc;
-    --green: #4ade80;
+/**
+ * GRID-TRACER V4 STYLESHEET
+ * Logic: Fixed-width columns for zero-gap alignment.
+ * Layout: Triple-column Grid (460px - Fluid - 460px).
+ */
+
+:root { 
+    /* Dark Theme Palette */
+    --bg: #0a0a1f; 
+    --card: #1c1c3a; 
+    --text: #ddd; 
+    --accent: #bb86fc; 
+    --green: #4ade80; 
+    --red: #f87171; 
+    --link: #66d9ff; 
+    --sub-gradient: linear-gradient(90deg, #162447 0%, #1f4068 100%);
+    --header-bg: #0d1b40; 
+    --mkt-time: #ffcc00; 
     --v-line: rgba(255, 255, 255, 0.08);
-    --sidebar-w: 460px;
+    
+    /* Layout Variables */
+    --sidebar-w: 460px; 
+    --table-max-w: 950px;
 }
 
-* { box-sizing: border-box; }
-
-body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    margin: 0;
+/* Light Theme Overrides */
+[data-theme="light"] {
+    --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --accent: #7c3aed; 
+    --header-bg: #1e293b; --mkt-time: #4338ca; --v-line: rgba(0, 0, 0, 0.1);
 }
 
+body { 
+    font-family: 'Segoe UI', system-ui, sans-serif; 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    padding: 0 15px; 
+    transition: background 0.3s ease; 
+    overflow-x: hidden; 
+}
+
+/* --- GRID SYSTEM --- */
 .dashboard-wrapper {
     display: grid;
     grid-template-columns: var(--sidebar-w) 1fr var(--sidebar-w);
     gap: 15px;
-    padding: 15px;
-    width: 100vw;
+    margin-top: 5px;
 }
 
-.sidebar-inner {
-    background: var(--card);
-    border: 1px solid var(--v-line);
-    border-radius: 6px;
-    padding: 20px;
-    height: calc(100vh - 70px);
+.widget-title { 
+    color: var(--accent); 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    font-size: 0.85em; 
+    border-bottom: 1px solid var(--v-line); 
+    padding-bottom: 8px; 
+    margin-bottom: 15px; 
 }
 
-.widget-title {
-    color: var(--accent);
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* --- MAIN CONTENT & HEADER ALIGNMENT --- */
+.main-content { 
+    min-width: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }

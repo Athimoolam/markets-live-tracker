@@ -1,22 +1,9 @@
+/* --- SIDEBAR COMPONENTS --- */
+.sidebar { padding-top: 30px; }
 .sidebar-inner { 
-    background: var(--card); 
-    border-radius: 6px; 
+    border: 1px solid var(--v-line); 
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px; 
     padding: 20px; 
-    border: 1px solid var(--v-line); 
-    height: 100%;
+    min-height: 600px;
 }
-
-.widget-title { color: var(--accent); font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
-
-.matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-.matrix-card { 
-    background: rgba(255, 255, 255, 0.03); 
-    border: 1px solid var(--v-line); 
-    padding: 15px; 
-    border-radius: 6px; 
-}
-
-.matrix-city { font-size: 0.75em; opacity: 0.7; display: block; margin-bottom: 5px; }
-
-.matrix-time { font-family: monospace; font-size: 1.4em; color: var(--green); font-weight: bold; }
