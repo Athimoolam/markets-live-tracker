@@ -30,11 +30,11 @@ th {
 
 /* Main Row Data - Reduced to 0.75em and Tight Padding */
 td { 
-    padding: 4px 6px; 
+    padding: 8px 6px; 
     text-align: left; 
     border-bottom: 1px solid #2d2d4d; 
     white-space: nowrap; 
-    font-size: 0.75em; 
+    font-size: 0.88em; 
 }
 
 td + td, th + th { border-left: 1px solid var(--v-line); }
