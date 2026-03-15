@@ -1,65 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Grid-Tracer V4 | Global Market Monitor</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid-Tracer V4 | Modular</title>
+    <link rel="stylesheet" href="global.css">
 </head>
 <body>
-
-<div class="dashboard-wrapper">
-    
-    <aside class="sidebar">
-        <div class="sidebar-inner">
-            <div class="widget-title">Market Analysis</div>
-            </div>
-    </aside>
-
-    <main class="main-content">
+    <div class="dashboard-wrapper">
+        <aside id="left-sidebar-anchor" class="sidebar"></aside>
         
-        <header class="table-header-row">
-            <div class="header-left">
-                <input type="text" id="marketSearch" placeholder="🔍 Filter exchanges..." onkeyup="updateTable()">
-            </div>
-            
-            <div class="header-center">
-                <h1>World Markets Live</h1>
-                <div id="mainClock"></div>
-            </div>
+        <main class="main-content">
+            <header id="header-anchor" class="table-header-row"></header>
+            <section id="table-anchor" class="panel"></section>
+        </main>
 
-            <div class="header-right">
-                <button class="theme-btn" onclick="toggleTheme()">🌓 APPEARANCE</button>
-            </div>
-        </header>
+        <aside id="right-sidebar-anchor" class="sidebar"></aside>
+    </div>
 
-        <div class="panel">
-            <table id="marketTable">
-                <thead>
-                    <tr>
-                        <th class="col-exch">Exchange</th>
-                        <th class="col-hours">Hours</th>
-                        <th class="col-sess">Session</th>
-                        <th class="col-mtime">Market Time</th>
-                        <th class="col-ytime">Your Time</th>
-                        <th class="col-status">Status</th>
-                        <th class="col-open">To Open</th>
-                        <th class="col-close">To Close</th>
-                    </tr>
-                </thead>
-                <tbody id="marketBody"></tbody>
-            </table>
-        </div>
-    </main>
-
-    <aside class="sidebar">
-        <div class="sidebar-inner">
-            <div class="widget-title">Economic Calendar</div>
-            </div>
-    </aside>
-
-</div>
-
-<script src="script.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
