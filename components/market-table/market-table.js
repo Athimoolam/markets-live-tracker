@@ -51,23 +51,15 @@ export function run() {
 
         html += `
             <tr>
-                <td class="col-exch">
-                    <a href="${ex.url}" target="_blank" style="color:#fff; text-decoration:none"><strong>${ex.name}</strong></a><br>
-                    <span style="font-size:0.8em; opacity:0.6">${ex.city}</span>
-                </td>
-                <td class="col-hours">${ex.open}-${ex.close}</td>
-                <td class="col-sess">${isWeekend ? 'Wknd' : (isOpen ? 'Main' : 'Clsd')}</td>
-                <td class="col-mtime">
-                    ${mTime.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', second:'2-digit'})}
-                    <span class="offset-tag">${diffStr}h</span>
-                </td>
-                <td class="col-ytime">${now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}</td>
-                <td class="col-status"><span class="${isOpen ? 'status-open' : 'status-closed'}">${isOpen ? 'OPEN' : 'CLOSED'}</span></td>
-                <td class="col-open">${toOpen}</td>
-                <td class="col-close">${toClose}</td>
+                <td><a href="${ex.url}" target="_blank" style="color:#fff; text-decoration:none"><strong>${ex.name}</strong></a><br><small style="opacity:0.6">${ex.city}</small></td>
+                <td>${ex.open} - ${ex.close}</td>
+                <td>${isWeekend ? 'Weekend' : (isOpen ? 'Main' : 'Closed')}</td>
+                <td>${mTime.toLocaleTimeString('en-GB')} <span class="offset-tag">${diffStr}h</span></td>
+                <td>${now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}</td>
+                <td><span class="${isOpen ? 'status-open' : 'status-closed'}">${isOpen ? 'OPEN' : 'CLOSED'}</span></td>
+                <td>${toOpen}</td>
+                <td>${toClose}</td>
             </tr>`;
     });
-
-    const body = document.getElementById('marketBody');
-    if (body) body.innerHTML = html;
+    document.getElementById('marketBody').innerHTML = html;
 }
