@@ -83,7 +83,7 @@
 }
 
 /* Rupee (INR) Specifics */
-#inrPrice, #inrdkkPrice, #inrgbpPrice {
+#inrPrice, #inrdkkPrice, #inrgbpPrice, #inrsekPrice {
     color: #4dbdff; /* Rupee Blue */
 }
 
