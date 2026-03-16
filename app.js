@@ -13,14 +13,18 @@ async function init() {
     const table = await loadComponent('market-table', 'table-anchor');
 
     // Restore original Sidebar Labels
-    document.getElementById('left-sidebar-anchor').innerHTML = `
-        <div class="sidebar-inner"><div class="widget-title">Market Analysis</div></div>`;
-    document.getElementById('right-sidebar-anchor').innerHTML = `
-        <div class="sidebar-inner"><div class="widget-title">Economic Calendar</div></div>`;
+    //    document.getElementById('left-sidebar-anchor').innerHTML = `
+    //        <div class="sidebar-inner"><div class="widget-title">Market Analysis</div></div>`;
+    //document.getElementById('right-sidebar-anchor').innerHTML = `
+    //    <div class="sidebar-inner"><div class="widget-title">Economic Calendar</div></div>`;
+    const leftsidebar = await loadComponent('left-side-bar', 'left-sidebar-anchor');
+    const rightsidebar = await loadComponent('right-side-bar', 'right-sidebar-anchor');
 
     function tick() {
         header.run();
         table.run();
+        leftsidebar.run();
+        rightsidebar.run();
     }
 
     setInterval(tick, 1000);
