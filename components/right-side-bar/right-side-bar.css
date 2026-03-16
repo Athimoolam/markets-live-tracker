@@ -1,30 +1,106 @@
-.crypto-ticker-container {
-    margin-top: 20px;
+/* --- RIGHT SIDEBAR LAYOUT --- */
+.sidebar-inner {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    padding: 10px;
 }
 
-.ticker-row {
+/* --- SECTION HEADERS (TILES) --- */
+.widget-group {
+    margin-bottom: 20px;
+}
+
+.widget-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    background: rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- PRICE ROWS --- */
+.price-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 12px 15px;
+    margin-bottom: 6px;
     background: rgba(255, 255, 255, 0.03);
-    padding: 10px;
-    border-radius: 4px;
-    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
 }
 
-.ticker-label {
-    font-size: 0.75em;
-    color: var(--text);
-    opacity: 0.7;
-    font-weight: bold;
+.price-row:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateX(5px);
+    border-color: rgba(var(--accent-rgb), 0.4);
 }
 
-.ticker-value {
+/* --- TEXT STYLING --- */
+/* The Name (e.g. Bitcoin, Gold) */
+.price-row span:first-child {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* The Price/Value */
+.price-row span:last-child {
     font-family: 'Courier New', monospace;
-    font-size: 0.9em;
-    color: var(--green);
-    font-weight: bold;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
+
+/* --- COLOR CODING BY GROUP --- */
+
+/* Market Leaders (BTC/ETH) */
+#btcPrice, #ethPrice {
+    color: #f7931a; /* Bitcoin Orange */
+    text-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
+}
+
+/* Commodities (Gold) */
+#paxgPrice {
+    color: #ffd700; /* Gold */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Forex vs USD */
+#eurPrice, #gbpPrice, #sekPrice, #dkkPrice, #aedPrice {
+    color: #00e676; /* Forex Green */
+}
+
+/* Rupee (INR) Specifics */
+#inrPrice, #inrdkkPrice, #inrgbpPrice {
+    color: #4dbdff; /* Rupee Blue */
+}
+
+/* --- UTILITIES --- */
+hr {
+    border: 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    margin: 10px 0;
+}
+
+/* "Live" Pulse Dot Animation */
+.widget-title::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #00ff00;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;

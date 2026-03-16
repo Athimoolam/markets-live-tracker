@@ -1,63 +1,65 @@
 /**
- * RIGHT SIDEBAR COMPONENT - LIVE CRYPTO
+ * RIGHT SIDEBAR - FINAL INTEGRATED VERSION
  */
 
-let isConnected = false;
-let socket = null;
+const symbols = [
+    'btcusdt', 'ethusdt', // Base Cryptos
+    'paxgusdt',           // Gold
+    'eurusdt', 'gbpusdt', // Forex Direct
+    'usdtsek', 'usdtdkk', 'usdtinr', 'usdtaed' // Forex Bridges
+];
 
-function initCryptoStream() {
-    // CRITICAL: Prevent app.js loop from opening multiple connections
-    if (isConnected || (socket && socket.readyState === WebSocket.CONNECTING)) return;
+export function run() {
+    // We only need to start the socket once. 
+    // If it's already open, we don't start a new one.
+    if (window.priceSocket) return;
+    
+    const streamUrl = `wss://stream.binance.com:9443/stream?streams=${symbols.map(s => s + '@ticker').join('/')}`;
+    window.priceSocket = new WebSocket(streamUrl);
 
-    const wsUrl = "wss://stream.binance.com:9443/stream?streams=btcusdt@ticker/ethusdt@ticker/bnbusdt@ticker";
-    socket = new WebSocket(wsUrl);
+    window.priceSocket.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        const data = msg.data;
+        const s = data.s; 
+        const p = parseFloat(data.c); 
 
-    socket.onopen = () => {
-        isConnected = true;
-        console.log("✅ Sidebar: WebSocket Connected");
-    };
+        // 1. Update Market Leaders
+        if (s === 'BTCUSDT') document.getElementById('btcPrice').innerText = "$" + p.toLocaleString();
+        if (s === 'ETHUSDT') document.getElementById('ethPrice').innerText = "$" + p.toLocaleString();
 
-    socket.onmessage = (event) => {
-        const rawData = JSON.parse(event.data);
-        const data = rawData.data;
-        const symbol = data.s;
-        const price = parseFloat(data.c).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+        // 2. Update Commodities
+        if (s === 'PAXGUSDT') document.getElementById('paxgPrice').innerText = "$" + p.toFixed(2);
 
-        if (symbol === "BTCUSDT") {
-            const el = document.getElementById('btcPrice');
-            if (el) el.innerText = "$" + price;
-        } else if (symbol === "ETHUSDT") {
-            const el = document.getElementById('ethPrice');
-            if (el) el.innerText = "$" + price;
-        } else if (symbol === "BNBUSDT") { // Handle BNB
-            const el = document.getElementById('bnbPrice');
-            if (el) el.innerText = "$" + price;
-        }
-    };
+        // 3. Update Forex Direct
+        if (s === 'EURUSDT') document.getElementById('eurPrice').innerText = p.toFixed(4);
+        if (s === 'GBPUSDT') document.getElementById('gbpPrice').innerText = p.toFixed(4);
 
-    socket.onclose = () => {
-        isConnected = false;
-        console.warn("⚠️ Sidebar: Connection closed. Retrying...");
-        setTimeout(initCryptoStream, 5000);
-    };
+        // 4. Update Forex Bridges
+        if (s === 'USDTSEK') document.getElementById('sekPrice').innerText = p.toFixed(2);
+        if (s === 'USDTDKK') document.getElementById('dkkPrice').innerText = p.toFixed(2);
+        if (s === 'USDTINR') document.getElementById('inrPrice').innerText = p.toFixed(2);
+        if (s === 'USDTAED') document.getElementById('aedPrice').innerText = p.toFixed(2);
 
-    socket.onerror = (err) => {
-        console.error("WebSocket Error:", err);
+        // Calculate Cross Rates
+        calculateCrossRates();
     };
 }
 
-// Start the stream as soon as the module is loaded by app.js
-initCryptoStream();
+function calculateCrossRates() {
+    const inr = parseFloat(document.getElementById('inrPrice')?.innerText) || 0;
+    const dkk = parseFloat(document.getElementById('dkkPrice')?.innerText) || 0;
+    const gbp = parseFloat(document.getElementById('gbpPrice')?.innerText) || 0;
 
-/**
- * The run() function is called every 1s by app.js.
- * We leave it empty because the WebSocket updates the DOM automatically 
- * based on events, not a timer.
- */
-export function run() {
-    // No code needed here for price updates.
-    // WebSocket handles it in real-time.
+    if (inr > 0) {
+        if (dkk > 0) {
+            const inrDkk = (1 / inr) * dkk;
+            const el = document.getElementById('inrdkkPrice');
+            if (el) el.innerText = inrDkk.toFixed(4);
+        }
+        if (gbp > 0) {
+            const inrGbp = (1 / inr) / gbp;
+            const el = document.getElementById('inrgbpPrice');
+            if (el) el.innerText = inrGbp.toFixed(6);
+        }
+    }
 }
