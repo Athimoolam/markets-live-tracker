@@ -1,10 +1,14 @@
 const CITIES = [
-    { name: "New York", tz: "America/New_York" },
-    { name: "London", tz: "Europe/London" },
-    { name: "Tokyo", tz: "Asia/Tokyo" },
     { name: "Sydney", tz: "Australia/Sydney" },
+    { name: "Tokyo", tz: "Asia/Tokyo" },
+    { name: "Singapore", tz: "Asia/singapore" },
+    { name: "Chennai", tz: "Asia/Kolkata" },
     { name: "Dubai", tz: "Asia/Dubai" },
-    { name: "Frankfurt", tz: "Europe/Berlin" }
+    { name: "Stockholm", tz: "Europe/stockholm" },
+    { name: "London", tz: "Europe/London" },
+    { name: "New York", tz: "America/New_York" },
+    { name: "Denver", tz: "America/denver" },
+    { name: "San Francisco", tz: "America/Los_Angeles" }
 ];
 
 export function run() {
