@@ -104,3 +104,12 @@ hr {
     border-radius: 50%;
     margin-right: 10px;
     vertical-align: middle;
+    box-shadow: 0 0 8px #00ff00;
+    animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+    0% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.3; transform: scale(0.8); }
+}
