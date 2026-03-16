@@ -1,0 +1,51 @@
+.table-header-row {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%; 
+    max-width: var(--table-max-w); 
+    padding: 10px 0;
+}
+
+.header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+    flex: 1;
+}
+
+.header-center h1 {
+    font-size: 1.7em; /* Restored to original size */
+    margin: 0;
+    font-weight: 700;
+}
+
+#mainClock {
+    font-family: monospace; 
+    color: var(--green); 
+    font-size: 1.2em; 
+    margin-top: 5px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+}
+.price-ticker {
+    display: flex;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    margin-right: 15px;
+}
+
+.price-item {
+    font-size: 0.75em;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.price-val {
+    color: var(--green);
+    font-family: monospace;
+}
