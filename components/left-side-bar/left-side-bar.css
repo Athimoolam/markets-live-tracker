@@ -30,8 +30,19 @@
     color: var(--green); /* Glowing Green */
 }
 
+.matrix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
 .matrix-offset {
-    font-size: 0.8em;
-    color: var(--accent);
-    margin-left: 5px;
+    font-size: 1.0rem;
+    color: var(--accent); /* Or a dim white/gray */
+    opacity: 0.6;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 4px;
+    border-radius: 3px;
 }
